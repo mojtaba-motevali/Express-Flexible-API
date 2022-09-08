@@ -1,0 +1,19 @@
+{
+  "name": "backend-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mojtaba-motevali/Backend-test.git"
+  },
+  "author": "Mojtaba Motevali",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mojtaba-motevali/Backend-test/issues"
+  },
+  "homepage": "https://github.com/mojtaba-motevali/Backend-test#readme"
+}
