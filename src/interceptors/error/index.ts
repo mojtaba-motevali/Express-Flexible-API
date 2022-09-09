@@ -1,14 +1,15 @@
 import { IErrorInterceptorRType, IInterceptorArgs } from "interfaces";
 
-export const transformErrorResponse = (
-  res: IInterceptorArgs
-): IErrorInterceptorRType => ({
+export const transformErrorResponse = ({
+  statusCode,
+  body,
+}: IInterceptorArgs): IErrorInterceptorRType => ({
   error: true,
-  code: res.statusCode,
+  code: statusCode,
   errorDetails:
-    typeof res.body === "string"
+    typeof body === "string"
       ? {
-          message: res.body,
+          message: body,
         }
-      : res.body,
+      : body,
 });
