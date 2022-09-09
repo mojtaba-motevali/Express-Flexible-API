@@ -1,10 +1,15 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { SERVICE_PORT } from "utils/config";
+import { ALLOWED_ORIGINS, SERVICE_PORT } from "utils/config";
 import { connectToDatabase } from "utils/database";
+import cors from "cors";
 
 const app = express();
-
+app.use(
+  cors({
+    origin: ALLOWED_ORIGINS,
+  })
+);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.listen(SERVICE_PORT, async () => {
   console.log(`Server started to listen on ${SERVICE_PORT}`);
