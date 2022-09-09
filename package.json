@@ -25,6 +25,7 @@
     "@types/jest": "^29.0.0",
     "@types/mocha": "^9.1.1",
     "@types/mongoose": "^5.11.97",
+    "@types/mongoose-delete": "^0.5.9",
     "@types/node": "^18.7.16",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "eslint": "^8.0.1",
@@ -47,6 +48,7 @@
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "joi": "^17.6.0",
-    "mongoose": "^6.5.5"
+    "mongoose": "^6.5.5",
+    "mongoose-delete": "^0.5.4"
   }
 }
