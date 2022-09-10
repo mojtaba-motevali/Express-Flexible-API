@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IFindProfileDto } from "../dto";
+import { IFindProfileDtoArgs } from "../dto";
 import { createProfileService, findProfilesService } from "../service";
 
 export const createProfileController = async (
@@ -14,7 +14,7 @@ export const createProfileController = async (
 };
 
 export const findProfilesController = async (
-  { query }: Request & { query: IFindProfileDto },
+  { query }: Request & { query: IFindProfileDtoArgs },
   res: Response
 ) => {
   try {

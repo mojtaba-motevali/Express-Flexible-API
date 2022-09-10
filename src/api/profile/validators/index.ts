@@ -12,7 +12,7 @@ export const validateProfile = ({
   optionalFields,
 }: IValidateProfileDTO) => {
   return checkSchema({
-    name: {
+    first_name: {
       isString: true,
       trim: true,
       isLength: {
@@ -22,7 +22,20 @@ export const validateProfile = ({
       ...commonSchemaValidation<IFindSelectFieldsArgs>({
         locations,
         optionalFields,
-        field: "name",
+        field: "first_name",
+      }),
+    },
+    last_name: {
+      isString: true,
+      trim: true,
+      isLength: {
+        options: { min: 3, max: 50 },
+        errorMessage: `name length should be between 3 and 50 characters.`,
+      },
+      ...commonSchemaValidation<IFindSelectFieldsArgs>({
+        locations,
+        optionalFields,
+        field: "last_name",
       }),
     },
     nickname: {

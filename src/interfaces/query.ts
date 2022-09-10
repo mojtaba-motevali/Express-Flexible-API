@@ -3,7 +3,7 @@ export interface IQueryDto {
   limit: number;
 }
 
-export interface IFindQueryDto<T> {
+export interface IFindQueryRTypeDto<T> {
   rows: T[];
   count?: number;
 }

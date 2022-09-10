@@ -1,8 +1,7 @@
-import { IFindQueryDto } from "interfaces";
-import { ObjectId } from "mongoose";
+import { IFindQueryRTypeDto } from "interfaces";
 import {
   ICreateProfileDto,
-  IFindProfileDto,
+  IFindProfileDtoArgs,
   IFindSelectFieldsArgs,
 } from "./dto";
 import { Profile, TProfile } from "./model";
@@ -11,19 +10,13 @@ export const createProfileEntity = (params: ICreateProfileDto) => {
   const profile = new Profile(params);
   return profile.save();
 };
-/**
- *
- * @param params
- * @param select
- * @param count
- * @returns {}
- */
+
 export const findProfilesEntity = async (
-  params: IFindProfileDto,
+  query: IFindProfileDtoArgs,
   select: Partial<IFindSelectFieldsArgs>,
   shouldCount = false
-): Promise<IFindQueryDto<TProfile>> => {
-  const { limit, page, ...otherFields } = params;
+): Promise<IFindQueryRTypeDto<Partial<TProfile>>> => {
+  const { limit, page, ...otherFields } = query;
   const conditions = Object.keys(otherFields).reduce((init, key) => {
     init[key] =
       key == "name" || key === "nickname"

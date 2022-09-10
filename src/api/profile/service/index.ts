@@ -1,5 +1,5 @@
-import { IFindQueryDto } from "interfaces";
-import { ICreateProfileDto, IFindProfileDto } from "../dto";
+import { IFindQueryRTypeDto } from "interfaces";
+import { ICreateProfileDto, IFindProfileDtoArgs } from "../dto";
 import { TProfile } from "../model";
 import { createProfileEntity, findProfilesEntity } from "../repository";
 
@@ -14,7 +14,7 @@ export const createProfileService = async (params: ICreateProfileDto) => {
 };
 
 export const findProfilesService = async (
-  params: IFindProfileDto
-): Promise<IFindQueryDto<TProfile>> => {
+  params: IFindProfileDtoArgs
+): Promise<IFindQueryRTypeDto<Partial<TProfile>>> => {
   return findProfilesEntity({ ...params }, {}, true);
 };

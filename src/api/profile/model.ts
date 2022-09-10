@@ -5,7 +5,12 @@ const { Schema } = mongoose;
 
 const schema = new Schema(
   {
-    name: {
+    first_name: {
+      type: String,
+      required: true,
+      index: true,
+    },
+    last_name: {
       type: String,
       required: true,
       index: true,
@@ -39,7 +44,13 @@ schema.plugin(MongooseDelete, {
   deletedAt: true,
 });
 export const Profile = mongoose.model("Profile", schema);
-type TSchemaBody = typeof Profile.schema.obj;
+
 export type TProfile = {
-  [key in keyof TSchemaBody]: TSchemaBody[key];
+  first_name: string;
+  last_name: string;
+  nickname?: string;
+  email: string;
+  capital: number;
+  divisa?: string;
+  prefered_cryptocurrency?: string;
 };
