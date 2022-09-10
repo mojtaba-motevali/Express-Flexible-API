@@ -1,46 +1,81 @@
-import { checkSchema } from "express-validator";
-export const validateCreateProfile = checkSchema({
-  name: {
-    isString: true,
-    trim: true,
-    isLength: {
-      options: { min: 3, max: 50 },
-      errorMessage: `name length should be between 3 and 50 characters.`,
+import { checkSchema, Location } from "express-validator";
+import { commonSchemaValidation } from "utils/common";
+import { IFindSelectFieldsArgs } from "../dto";
+
+interface IValidateProfileDTO {
+  locations: Location[];
+  optionalFields: (keyof IFindSelectFieldsArgs | "*")[];
+}
+
+export const validateProfile = ({
+  locations,
+  optionalFields,
+}: IValidateProfileDTO) => {
+  return checkSchema({
+    name: {
+      isString: true,
+      trim: true,
+      isLength: {
+        options: { min: 3, max: 50 },
+        errorMessage: `name length should be between 3 and 50 characters.`,
+      },
+      ...commonSchemaValidation<IFindSelectFieldsArgs>({
+        locations,
+        optionalFields,
+        field: "name",
+      }),
     },
-    in: ["body"],
-  },
-  nickname: {
-    isString: true,
-    trim: true,
-    isLength: {
-      options: { min: 3, max: 50 },
-      errorMessage: `nickname length should be between 3 and 50 characters.`,
+    nickname: {
+      isString: true,
+      trim: true,
+      isLength: {
+        options: { min: 3, max: 50 },
+        errorMessage: `nickname length should be between 3 and 50 characters.`,
+      },
+      ...commonSchemaValidation<IFindSelectFieldsArgs>({
+        locations,
+        optionalFields,
+        field: "nickname",
+      }),
     },
-    optional: true,
-    in: ["body"],
-  },
-  email: {
-    trim: true,
-    isEmail: {
-      errorMessage: "Invalid Email format provided.",
+    email: {
+      trim: true,
+      isEmail: {
+        errorMessage: "Invalid Email format provided.",
+      },
+      ...commonSchemaValidation<IFindSelectFieldsArgs>({
+        locations,
+        optionalFields,
+        field: "email",
+      }),
     },
-    in: ["body"],
-  },
-  capital: {
-    toInt: true,
-    isInt: true,
-    errorMessage: "capital should number.",
-    in: ["body"],
-  },
-  divisa: {
-    isString: true,
-    trim: true,
-    in: ["body"],
-  },
-  prefered_cryptocurrency: {
-    isString: true,
-    trim: true,
-    optional: true,
-    in: ["body"],
-  },
-});
+    capital: {
+      toInt: true,
+      isInt: true,
+      errorMessage: "capital should number.",
+      ...commonSchemaValidation<IFindSelectFieldsArgs>({
+        locations,
+        optionalFields,
+        field: "capital",
+      }),
+    },
+    divisa: {
+      isString: true,
+      trim: true,
+      ...commonSchemaValidation<IFindSelectFieldsArgs>({
+        locations,
+        optionalFields,
+        field: "divisa",
+      }),
+    },
+    prefered_cryptocurrency: {
+      isString: true,
+      trim: true,
+      ...commonSchemaValidation<IFindSelectFieldsArgs>({
+        locations,
+        optionalFields,
+        field: "prefered_cryptocurrency",
+      }),
+    },
+  });
+};

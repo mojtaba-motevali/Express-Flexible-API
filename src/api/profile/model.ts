@@ -17,9 +17,11 @@ const schema = new Schema(
       type: String,
       required: true,
       index: true,
+      unique: true,
     },
     capital: {
       type: Number,
+      index: true,
     },
     divisa: {
       type: String,
@@ -30,11 +32,14 @@ const schema = new Schema(
   },
   {
     timestamps: true,
+    autoCreate: true,
   }
 );
-
 schema.plugin(MongooseDelete, {
   deletedAt: true,
 });
-
 export const Profile = mongoose.model("Profile", schema);
+type TSchemaBody = typeof Profile.schema.obj;
+export type TProfile = {
+  [key in keyof TSchemaBody]: TSchemaBody[key];
+};
