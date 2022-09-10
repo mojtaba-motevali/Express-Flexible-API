@@ -10,3 +10,8 @@ export const connectToDatabase = async (url: string) => {
   await mongoose.connect(url, { loggerLevel: "debug" });
   console.log(`Connected to MongoDB on ${url}`);
 };
+
+export const disconnectFromDatabse = async () => {
+  await mongoose.disconnect();
+  console.log(`Disconnected from MongoDB`);
+};
