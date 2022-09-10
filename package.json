@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "npx nodemon --watch \"src/**\" --ext \"ts,json\" --ignore \"src/**/*-spec.ts\" --exec \"ts-node src/index.ts\"",
     "test:unit": "npx jest --config jest.json",
-    "test:int": "npx ts-mocha -p ./tsconfig.json src/**/*.int-spec.ts"
+    "test:int": "npx ts-mocha -p ./tsconfig.json --paths src/**/*.int-spec.ts",
+    "test:int-w": "npx ts-mocha -p ./tsconfig.json --paths  -w src/**/*.int-spec.ts"
   },
   "repository": {
     "type": "git",

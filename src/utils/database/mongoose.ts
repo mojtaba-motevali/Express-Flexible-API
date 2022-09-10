@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { DB_URL } from "utils/config";
 
 mongoose.connection.on("error", (msg) => {
   console.log("database error", msg);
@@ -7,7 +6,7 @@ mongoose.connection.on("error", (msg) => {
 });
 mongoose.set("debug", true);
 
-export const connectToDatabase = async () => {
-  await mongoose.connect(DB_URL, { loggerLevel: "debug" });
-  console.log(`Connected to MongoDB on ${DB_URL}`);
+export const connectToDatabase = async (url: string) => {
+  await mongoose.connect(url, { loggerLevel: "debug" });
+  console.log(`Connected to MongoDB on ${url}`);
 };

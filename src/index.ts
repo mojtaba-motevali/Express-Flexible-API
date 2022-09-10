@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { ALLOWED_ORIGINS, SERVICE_PORT } from "utils/config";
+import { ALLOWED_ORIGINS, DB_URL, SERVICE_PORT } from "utils/config";
 import { connectToDatabase } from "utils/database";
 import cors from "cors";
 import { overrideExpressJson } from "utils/common";
@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api", router);
 app.listen(SERVICE_PORT, async () => {
   console.log(`Server started to listen on ${SERVICE_PORT}`);
-  await connectToDatabase();
+  await connectToDatabase(DB_URL);
 });
 
 export default app;

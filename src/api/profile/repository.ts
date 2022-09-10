@@ -1,4 +1,5 @@
 import { IFindQueryRTypeDto } from "interfaces";
+import { ClientSession } from "mongoose";
 import {
   ICreateProfileDto,
   IFindProfileDtoArgs,
@@ -6,9 +7,11 @@ import {
 } from "./dto";
 import { Profile, TProfile } from "./model";
 
-export const createProfileEntity = (params: ICreateProfileDto) => {
-  const profile = new Profile(params);
-  return profile.save();
+export const createProfileEntity = async (
+  params: ICreateProfileDto[],
+  session: null | ClientSession = null
+) => {
+  return Profile.insertMany(params, { ordered: true, session });
 };
 
 export const findProfilesEntity = async (
@@ -18,12 +21,27 @@ export const findProfilesEntity = async (
 ): Promise<IFindQueryRTypeDto<Partial<TProfile>>> => {
   const { limit, page, ...otherFields } = query;
   const conditions = Object.keys(otherFields).reduce((init, key) => {
-    init[key] =
-      key == "name" || key === "nickname"
-        ? {
-            $regex: otherFields[key],
-          }
-        : otherFields[key];
+    switch (key) {
+      case "first_name":
+        init[key] = {
+          $regex: otherFields[key],
+        };
+        break;
+      case "last_name":
+        init[key] = {
+          $regex: otherFields[key],
+        };
+      case "email":
+        init[key] =
+          typeof otherFields[key] == "string"
+            ? otherFields[key]
+            : {
+                $in: otherFields[key],
+              };
+        break;
+      default:
+        init[key] = otherFields[key];
+    }
     return init;
   }, {});
   const [rows, count] = await Promise.all([

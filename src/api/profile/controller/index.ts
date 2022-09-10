@@ -7,7 +7,7 @@ export const createProfileController = async (
   res: Response
 ) => {
   try {
-    res.status(201).json(await createProfileService(body));
+    res.status(201).json(await createProfileService(body.profiles));
   } catch (err) {
     res.status(400).json(err.message);
   }

@@ -12,12 +12,12 @@ export const validateProfile = ({
   optionalFields,
 }: IValidateProfileDTO) => {
   return checkSchema({
-    first_name: {
+    "profiles.*.first_name": {
       isString: true,
       trim: true,
       isLength: {
         options: { min: 3, max: 50 },
-        errorMessage: `name length should be between 3 and 50 characters.`,
+        errorMessage: `first_name length should be between 3 and 50 characters.`,
       },
       ...commonSchemaValidation<IFindSelectFieldsArgs>({
         locations,
@@ -25,12 +25,12 @@ export const validateProfile = ({
         field: "first_name",
       }),
     },
-    last_name: {
+    "profiles.*.last_name": {
       isString: true,
       trim: true,
       isLength: {
         options: { min: 3, max: 50 },
-        errorMessage: `name length should be between 3 and 50 characters.`,
+        errorMessage: `last_name length should be between 3 and 50 characters.`,
       },
       ...commonSchemaValidation<IFindSelectFieldsArgs>({
         locations,
@@ -38,7 +38,7 @@ export const validateProfile = ({
         field: "last_name",
       }),
     },
-    nickname: {
+    "profiles.*.nickname": {
       isString: true,
       trim: true,
       isLength: {
@@ -51,7 +51,7 @@ export const validateProfile = ({
         field: "nickname",
       }),
     },
-    email: {
+    "profiles.*.email": {
       trim: true,
       isEmail: {
         errorMessage: "Invalid Email format provided.",
@@ -62,7 +62,7 @@ export const validateProfile = ({
         field: "email",
       }),
     },
-    capital: {
+    "profiles.*.capital": {
       toInt: true,
       isInt: true,
       errorMessage: "capital should number.",
@@ -72,7 +72,7 @@ export const validateProfile = ({
         field: "capital",
       }),
     },
-    divisa: {
+    "profiles.*.divisa": {
       isString: true,
       trim: true,
       ...commonSchemaValidation<IFindSelectFieldsArgs>({
@@ -81,7 +81,7 @@ export const validateProfile = ({
         field: "divisa",
       }),
     },
-    prefered_cryptocurrency: {
+    "profiles.*.prefered_cryptocurrency": {
       isString: true,
       trim: true,
       ...commonSchemaValidation<IFindSelectFieldsArgs>({

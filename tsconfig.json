@@ -2,6 +2,9 @@
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   },
+  "ts-mocha":{
+    "require": ["tsconfig-paths/register"]
+  },
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
