@@ -1,10 +1,11 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
 import MongooseDelete from "mongoose-delete";
-
-const { Schema } = mongoose;
 
 const schema = new Schema(
   {
+    _id: {
+      type: Schema.Types.ObjectId,
+    },
     first_name: {
       type: String,
       required: true,
@@ -27,6 +28,7 @@ const schema = new Schema(
     capital: {
       type: Number,
       index: true,
+      required: true,
     },
     divisa: {
       type: String,
@@ -44,13 +46,13 @@ schema.plugin(MongooseDelete, {
   deletedAt: true,
 });
 export const Profile = mongoose.model("Profile", schema);
-
-export type TProfile = {
+export interface TProfile {
+  _id?: Types.ObjectId;
   first_name: string;
   last_name: string;
   nickname?: string;
-  email: string;
   capital: number;
+  email: string;
   divisa?: string;
   prefered_cryptocurrency?: string;
-};
+}

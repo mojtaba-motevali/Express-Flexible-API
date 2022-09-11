@@ -1,10 +1,13 @@
-import mongoose, { ObjectId } from "mongoose";
+import mongoose, { ObjectId, Types } from "mongoose";
 import MongooseDelete from "mongoose-delete";
 
 const { Schema } = mongoose;
 
 const schema = new Schema(
   {
+    _id: {
+      type: Schema.Types.ObjectId,
+    },
     profile_id: {
       type: Schema.Types.ObjectId,
       ref: "Profile",
@@ -41,10 +44,11 @@ schema.plugin(MongooseDelete, {
   deletedAt: true,
 });
 export const Simulator = mongoose.model("Simulators", schema);
+
 export type TSimulator = {
-  _id?: string;
-  profile_id?: ObjectId;
-  date_recorded: string;
+  _id?: Types.ObjectId;
+  profile_id?: Types.ObjectId;
+  date_recorded: Date;
   cryptocurrency: string;
   price: number;
   euros: number;

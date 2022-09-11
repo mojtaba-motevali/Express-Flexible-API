@@ -7,11 +7,11 @@ import {
 } from "./dto";
 import { Profile, TProfile } from "./model";
 
-export const createProfileEntity = async (
+export const createProfileEntity = (
   params: ICreateProfileDto[],
   session: null | ClientSession = null
-) => {
-  return Profile.insertMany(params, { ordered: true, session });
+): Promise<TProfile[]> => {
+  return Profile.insertMany(params, { lean: true, ordered: true, session });
 };
 
 export const findProfilesEntity = async (
