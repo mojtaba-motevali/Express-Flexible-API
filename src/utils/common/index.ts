@@ -3,6 +3,7 @@ import { checkSchema, Location } from "express-validator";
 import { Optional } from "express-validator/src/context";
 import { InterceptorJsonBody } from "interceptors";
 import { ICommonValidation } from "interfaces";
+import Joi, { Schema } from "joi";
 
 export const overrideExpressJson = (response: Response) => {
   const json = response.json;
@@ -24,7 +25,7 @@ export const commonSchemaValidation = <T>({
   optional: true | { options?: Partial<Optional> | undefined } | undefined;
 } => {
   const allOptional = optionalFields[0] === "*";
-  const allRequired = optionalFields === undefined || optionalFields === null;
+  const allRequired = optionalFields.length < 1;
   return {
     in: locations,
     optional: allRequired
@@ -42,8 +43,8 @@ export const querySchema = checkSchema({
     toInt: true,
     errorMessage: "limit should be an integer",
     isLength: {
-      options: { min: 1, max: 100 },
-      errorMessage: "limit should be between 1 and 100.",
+      options: { min: 0, max: 100 },
+      errorMessage: "limit should be between 0 and 100.",
     },
     in: ["query"],
   },
@@ -58,3 +59,60 @@ export const querySchema = checkSchema({
     in: ["query"],
   },
 });
+
+export const customQuerySanizier = <T>(
+  value: string,
+  cast: (value: string) => T
+) => {
+  if (typeof value === "string") {
+    const isComparison = value.includes("|");
+    if (isComparison) {
+      const splited = value.split("|");
+      const result: { $gte?: T; $lte?: T } = {};
+      if (splited[0]) {
+        result.$gte = cast(splited[0]);
+      }
+      if (splited[1]) {
+        result.$lte = cast(splited[1]);
+      }
+      return result;
+    } else if (value.includes(",")) {
+      return {
+        $in: value.split(",").map((item) => cast(item)),
+      };
+    } else {
+      return cast(value);
+    }
+  }
+};
+/**
+ * This function retrieves value of T and a schema of Joi with specified type validation
+ * and does validation.
+ * @param value {T}
+ * @param schema {Schema}
+ */
+export const customQueryValidator = <T extends { $in: T }>(
+  value: T,
+  schema: Schema
+) => {
+  let schemaToBeValidated: Schema | null = null;
+  if (typeof value == "object") {
+    if (value.$in && Array.isArray(value.$in)) {
+      schemaToBeValidated = Joi.object({
+        $in: Joi.array().items(schema),
+      });
+    } else {
+      schemaToBeValidated = Joi.object({
+        $gte: schema.optional(),
+        $lte: schema.optional(),
+      });
+    }
+  } else {
+    schemaToBeValidated = schema;
+  }
+  const { error } = schemaToBeValidated.validate(value);
+  if (error) {
+    throw new Error(error.message);
+  }
+  return value;
+};
