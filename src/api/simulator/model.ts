@@ -5,9 +5,6 @@ const { Schema } = mongoose;
 
 const schema = new Schema(
   {
-    _id: {
-      type: Schema.Types.ObjectId,
-    },
     profile_id: {
       type: Schema.Types.ObjectId,
       ref: "Profile",

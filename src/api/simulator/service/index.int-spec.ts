@@ -19,6 +19,7 @@ describe("Testing Simulator Service", () => {
   describe("Create Simulator", () => {
     let profile: TProfile;
     before(async () => {
+      await Profile.deleteMany({});
       profile = (
         await createProfileService([
           {
@@ -125,6 +126,8 @@ describe("Testing Simulator Service", () => {
         limit: 1,
         page: 1,
       });
+      assert.equal(result.count, 3);
+      assert.equal(result.rows.length, 1);
       result.rows.forEach((simulator) => {
         expect(simulator.profile_id).toBeDefined();
         expect(simulator.quantity).toBeDefined();
@@ -136,12 +139,14 @@ describe("Testing Simulator Service", () => {
     });
     it("It should successfully fetches simulators with selected profile ids filter.", async () => {
       const result = await findSimulatorService({
-        profile_id: profileIds,
+        profile_id: {
+          $in: profileIds,
+        },
         withProfile: false,
         limit: 1,
         page: 1,
       });
-      assert.equal(result.count, 2);
+      assert.equal(result.count, 3);
       assert.equal(result.rows.length, 1);
     });
     it("It should successfully fetch simulators that have euros within a given range filter", async () => {

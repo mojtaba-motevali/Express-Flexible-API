@@ -7,6 +7,7 @@ export type IFindDTOArgs<T> = Partial<{
     | {
         $gte?: T[key];
         $lte?: T[key];
-      };
+      }
+    | { $in: T[key][] };
 }> &
   IQueryDto;

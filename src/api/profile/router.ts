@@ -2,27 +2,19 @@ import express from "express";
 import { querySchema } from "utils/common";
 import { validate } from "utils/validator";
 import { createProfileController, findProfilesController } from "./controller";
-import { validateProfile } from "./validators";
+import { validateFindProfile, validateProfileCreation } from "./validators";
 
 const profileRouter = express.Router();
 
 profileRouter.get(
   "/",
-  validate([
-    ...querySchema,
-    ...validateProfile({ locations: ["query"], optionalFields: ["*"] }),
-  ]),
+  validate([...querySchema, ...validateFindProfile]),
   findProfilesController
 );
 
 profileRouter.post(
   "/",
-  validate(
-    validateProfile({
-      locations: ["body"],
-      optionalFields: ["nickname", "prefered_cryptocurrency"],
-    })
-  ),
+  validate(validateProfileCreation),
   createProfileController
 );
 

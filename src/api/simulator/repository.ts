@@ -8,7 +8,7 @@ export const createSimulatorEntities = async (
   params: ICreateSimulator[],
   session: null | ClientSession = null
 ) => {
-  return Simulator.insertMany(params, { ordered: true, session });
+  return Simulator.insertMany(params, { lean: true, session });
 };
 export const findSimulatorEntities = async (
   query: IFindDTOArgs<TSimulator>,

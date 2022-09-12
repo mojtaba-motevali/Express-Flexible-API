@@ -3,15 +3,15 @@ import MongooseDelete from "mongoose-delete";
 
 const schema = new Schema(
   {
-    _id: {
-      type: Schema.Types.ObjectId,
-    },
     first_name: {
       type: String,
       required: true,
-      index: true,
     },
     last_name: {
+      type: String,
+      required: true,
+    },
+    full_name: {
       type: String,
       required: true,
       index: true,
@@ -50,6 +50,7 @@ export interface TProfile {
   _id?: Types.ObjectId;
   first_name: string;
   last_name: string;
+  full_name?: string;
   nickname?: string;
   capital: number;
   email: string;

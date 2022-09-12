@@ -1,8 +1,6 @@
-import { Response } from "express";
-import { checkSchema, Location } from "express-validator";
-import { Optional } from "express-validator/src/context";
+import e, { Response } from "express";
+import { checkSchema } from "express-validator";
 import { InterceptorJsonBody } from "interceptors";
-import { ICommonValidation } from "interfaces";
 import Joi, { Schema } from "joi";
 
 export const overrideExpressJson = (response: Response) => {
@@ -13,27 +11,6 @@ export const overrideExpressJson = (response: Response) => {
       body,
     });
     return json.call(this, newBody);
-  };
-};
-
-export const commonSchemaValidation = <T>({
-  optionalFields,
-  locations,
-  field,
-}: ICommonValidation<T> & { field: keyof T }): {
-  in: Location[];
-  optional: true | { options?: Partial<Optional> | undefined } | undefined;
-} => {
-  const allOptional = optionalFields[0] === "*";
-  const allRequired = optionalFields.length < 1;
-  return {
-    in: locations,
-    optional: allRequired
-      ? undefined
-      : allOptional ||
-        (optionalFields.length > 0 && optionalFields.includes(field))
-      ? true
-      : undefined,
   };
 };
 
@@ -60,6 +37,9 @@ export const querySchema = checkSchema({
   },
 });
 
+export const customQueryRegexSanizer = (value: string) => ({
+  $regex: value,
+});
 export const customQuerySanizier = <T>(
   value: string,
   cast: (value: string) => T
@@ -91,7 +71,7 @@ export const customQuerySanizier = <T>(
  * @param value {T}
  * @param schema {Schema}
  */
-export const customQueryValidator = <T extends { $in: T }>(
+export const customQueryValidator = <T extends { $in: T } & { $regex: T }>(
   value: T,
   schema: Schema
 ) => {
@@ -100,6 +80,10 @@ export const customQueryValidator = <T extends { $in: T }>(
     if (value.$in && Array.isArray(value.$in)) {
       schemaToBeValidated = Joi.object({
         $in: Joi.array().items(schema),
+      });
+    } else if (value.$regex) {
+      schemaToBeValidated = Joi.object({
+        $regex: Joi.string(),
       });
     } else {
       schemaToBeValidated = Joi.object({

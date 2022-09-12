@@ -2,11 +2,8 @@ import { checkSchema } from "express-validator";
 import Joi from "joi";
 import { isValidObjectId, Types } from "mongoose";
 import { customQuerySanizier, customQueryValidator } from "utils/common";
-const joiDate = Joi.date();
-const joiNumber = Joi.number();
-const joiObjectId = Joi.custom((value) => {
-  return isValidObjectId(value);
-});
+import { dateSchema, numberSchema, objectIdSchema } from "utils/validator";
+
 export const validateFindSimulators = checkSchema(
   {
     profile_id: {
@@ -15,7 +12,7 @@ export const validateFindSimulators = checkSchema(
           customQuerySanizier<Types.ObjectId>(value, Types.ObjectId as any),
       },
       custom: {
-        options: (value) => customQueryValidator(value, joiObjectId),
+        options: (value) => customQueryValidator(value, objectIdSchema),
       },
       optional: true,
     },
@@ -40,7 +37,7 @@ export const validateFindSimulators = checkSchema(
         options: (value) => customQuerySanizier(value, (v) => new Date(v)),
       },
       custom: {
-        options: (value) => customQueryValidator(value, joiDate),
+        options: (value) => customQueryValidator(value, dateSchema),
       },
       optional: true,
     },
@@ -49,7 +46,7 @@ export const validateFindSimulators = checkSchema(
         options: (value) => customQuerySanizier(value, Number),
       },
       custom: {
-        options: (value) => customQueryValidator(value, joiNumber),
+        options: (value) => customQueryValidator(value, numberSchema),
       },
       optional: true,
     },
@@ -58,7 +55,7 @@ export const validateFindSimulators = checkSchema(
         options: (value) => customQuerySanizier(value, Number),
       },
       custom: {
-        options: (value) => customQueryValidator(value, joiNumber),
+        options: (value) => customQueryValidator(value, numberSchema),
       },
       optional: true,
     },
@@ -67,7 +64,7 @@ export const validateFindSimulators = checkSchema(
         options: (value) => customQuerySanizier(value, Number),
       },
       custom: {
-        options: (value) => customQueryValidator(value, joiNumber),
+        options: (value) => customQueryValidator(value, numberSchema),
       },
       optional: true,
     },
