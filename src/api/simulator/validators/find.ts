@@ -1,6 +1,5 @@
 import { checkSchema } from "express-validator";
-import Joi from "joi";
-import { isValidObjectId, Types } from "mongoose";
+import { Types } from "mongoose";
 import { customQuerySanizier, customQueryValidator } from "utils/common";
 import { dateSchema, numberSchema, objectIdSchema } from "utils/validator";
 

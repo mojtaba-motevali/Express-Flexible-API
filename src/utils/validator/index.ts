@@ -13,6 +13,8 @@ export const validate = (validations: ValidationChain[]) => {
     res.status(400).json(errors.array());
   };
 };
+export const enumSchema = (whiteList: string[]) =>
+  Joi.array().items(Joi.allow(whiteList));
 export const stringSchema = Joi.string();
 export const emailSchema = stringSchema.email();
 export const dateSchema = Joi.date();

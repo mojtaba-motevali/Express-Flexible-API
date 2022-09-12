@@ -15,7 +15,7 @@ export const findSimulatorEntities = async (
   select: Partial<IFindSelectFieldsArgs>,
   shouldCount = false
 ): Promise<IFindQueryRTypeDto<Partial<TSimulator>>> => {
-  const { limit, page, ...otherFields } = query;
+  const { limit, page, sort, ...otherFields } = query;
   const { withProfile, ...otherSelectFields } = select;
   const aggregateArray: PipelineStage[] = [];
   aggregateArray.push({
@@ -39,16 +39,14 @@ export const findSimulatorEntities = async (
       ? { ...otherSelectFields, profile: "$profile" }
       : otherSelectFields,
   });
+  if (sort) {
+    aggregateArray.push({
+      $sort: sort,
+    });
+  }
+  aggregateArray.push({ $skip: (page - 1) * limit }, { $limit: limit });
   const [rows, count] = await Promise.all([
-    Simulator.aggregate([
-      ...aggregateArray,
-      {
-        $skip: (page - 1) * limit,
-      },
-      {
-        $limit: limit,
-      },
-    ]),
+    Simulator.aggregate(aggregateArray),
     shouldCount ? Simulator.count({ ...otherFields }).lean() : undefined,
   ]);
   return shouldCount

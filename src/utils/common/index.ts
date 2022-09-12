@@ -2,6 +2,7 @@ import e, { Response } from "express";
 import { checkSchema } from "express-validator";
 import { InterceptorJsonBody } from "interceptors";
 import Joi, { Schema } from "joi";
+import { enumSchema } from "utils/validator";
 
 export const overrideExpressJson = (response: Response) => {
   const json = response.json;
@@ -14,28 +15,40 @@ export const overrideExpressJson = (response: Response) => {
   };
 };
 
-export const querySchema = checkSchema({
-  limit: {
-    isInt: true,
-    toInt: true,
-    errorMessage: "limit should be an integer",
-    isLength: {
-      options: { min: 0, max: 100 },
-      errorMessage: "limit should be between 0 and 100.",
+export const queryValidatorSchema = (sortWhitelist: string[]) =>
+  checkSchema({
+    limit: {
+      isInt: true,
+      toInt: true,
+      errorMessage: "limit should be an integer",
+      isLength: {
+        options: { min: 0, max: 100 },
+        errorMessage: "limit should be between 0 and 100.",
+      },
+      in: ["query"],
     },
-    in: ["query"],
-  },
-  page: {
-    isInt: true,
-    toInt: true,
-    isLength: {
-      options: { min: 1 },
-      errorMessage: "page should be more 1.",
+    page: {
+      isInt: true,
+      toInt: true,
+      isLength: {
+        options: { min: 1 },
+        errorMessage: "page should be more 1.",
+      },
+      errorMessage: "page should be an integer",
+      in: ["query"],
     },
-    errorMessage: "page should be an integer",
-    in: ["query"],
-  },
-});
+    sort: {
+      customSanitizer: {
+        options: (value) => customQuerySortSanizier(value),
+      },
+      custom: {
+        options: (value) =>
+          enumSchema(sortWhitelist).validate(Object.keys(value)),
+      },
+      optional: true,
+      in: ["query"],
+    },
+  });
 
 export const customQueryRegexSanizer = (value: string) => ({
   $regex: value,
@@ -99,4 +112,17 @@ export const customQueryValidator = <T extends { $in: T } & { $regex: T }>(
     throw new Error(error.message);
   }
   return value;
+};
+
+export const customQuerySortSanizier = (sortStr: string) => {
+  const fields = sortStr.split(",");
+  return fields.reduce((currObject, currItem) => {
+    if (currItem.length > 0) {
+      const isDsc = currItem.charAt(0) === "-";
+      const sortOperation = isDsc ? -1 : 1;
+      const key = isDsc ? currItem.substring(1) : currItem;
+      return (currObject[key] = sortOperation);
+    }
+    return currObject;
+  }, {});
 };

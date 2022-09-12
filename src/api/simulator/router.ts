@@ -1,10 +1,11 @@
 import express from "express";
-import { querySchema } from "utils/common";
+import { queryValidatorSchema } from "utils/common";
 import { validate } from "utils/validator";
 import {
   createSimulatorController,
   findSimulatorController,
 } from "./controller";
+import { Simulator } from "./model";
 import {
   validateFindSimulators,
   validateSimulatorCreation,
@@ -14,7 +15,10 @@ const simulatorRouter = express.Router();
 
 simulatorRouter.get(
   "/",
-  validate([...querySchema, ...validateFindSimulators]),
+  validate([
+    ...queryValidatorSchema(Object.keys(Simulator.schema.obj)),
+    ...validateFindSimulators,
+  ]),
   findSimulatorController
 );
 
