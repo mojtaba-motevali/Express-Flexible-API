@@ -25,7 +25,7 @@ const schema = new Schema(
 schema.plugin(MongooseDelete, {
   deletedAt: true,
 });
-export const Favorite = mongoose.model("Favorite", schema);
+export const Favorite = mongoose.model("Favorites", schema);
 
 export type TFavorite = {
   _id?: Types.ObjectId;

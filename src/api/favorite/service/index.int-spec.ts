@@ -99,7 +99,7 @@ describe("Testing Favorite Service", () => {
           {
             profile_id: profile1._id,
             name: "My Favorite 3",
-            favorites: ["GoodDay", "BadDay"],
+            favorites: ["Coffe", "BadDay"],
           },
         ]);
       }
@@ -137,12 +137,14 @@ describe("Testing Favorite Service", () => {
     it("It should successfully fetch favorites with favorites list filter", async () => {
       const result = await findFavoriteService({
         withProfile: false,
-        favorites: [favorites[0].favorites[0]],
-        limit: 10,
+        favorites: {
+          $in: [favorites[1].favorites[0]],
+        },
+        limit: 1,
         page: 1,
       });
-      assert.equal(result.count, 3);
-      assert.equal(result.rows.length, result.count);
+      assert.equal(result.count, 2);
+      assert.equal(result.rows.length, 1);
     });
   });
 });
