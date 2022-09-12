@@ -22,9 +22,10 @@ export const findProfilesEntity = async (
   select: Partial<IFindSelectFieldsArgs>,
   shouldCount = false
 ): Promise<IFindQueryRTypeDto<Partial<TProfile>>> => {
-  const { limit, page, ...otherFields } = query;
+  const { limit, page, sort, ...otherFields } = query;
   const [rows, count] = await Promise.all([
     Profile.find({ ...otherFields }, select, {
+      sort: sort,
       limit: limit,
       skip: (page - 1) * limit,
     }).lean(),

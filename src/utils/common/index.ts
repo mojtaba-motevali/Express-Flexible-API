@@ -42,8 +42,16 @@ export const queryValidatorSchema = (sortWhitelist: string[]) =>
         options: (value) => customQuerySortSanizier(value),
       },
       custom: {
-        options: (value) =>
-          enumSchema(sortWhitelist).validate(Object.keys(value)),
+        options: (fields) => {
+          const { error, value } = enumSchema(
+            Array.from(sortWhitelist)
+          ).validate(Array.from(Object.keys(fields)));
+          if (error) {
+            throw new Error(error.message);
+          } else {
+            return value;
+          }
+        },
       },
       optional: true,
       in: ["query"],
@@ -115,13 +123,12 @@ export const customQueryValidator = <T extends { $in: T } & { $regex: T }>(
 };
 
 export const customQuerySortSanizier = (sortStr: string) => {
-  const fields = sortStr.split(",");
-  return fields.reduce((currObject, currItem) => {
+  return sortStr.split(",").reduce((currObject, currItem) => {
     if (currItem.length > 0) {
       const isDsc = currItem.charAt(0) === "-";
-      const sortOperation = isDsc ? -1 : 1;
       const key = isDsc ? currItem.substring(1) : currItem;
-      return (currObject[key] = sortOperation);
+      currObject[key] = isDsc ? -1 : 1;
+      return currObject;
     }
     return currObject;
   }, {});

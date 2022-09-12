@@ -14,7 +14,7 @@ export const validate = (validations: ValidationChain[]) => {
   };
 };
 export const enumSchema = (whiteList: string[]) =>
-  Joi.array().items(Joi.allow(whiteList));
+  Joi.array().items(Joi.valid(...whiteList));
 export const stringSchema = Joi.string();
 export const emailSchema = stringSchema.email();
 export const dateSchema = Joi.date();
