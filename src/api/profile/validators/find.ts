@@ -33,6 +33,7 @@ export const validateFindProfile = checkSchema(
       custom: {
         options: (value) => customQueryValidator(value, objectIdSchema),
       },
+      optional: true,
     },
     full_name: {
       customSanitizer: {
@@ -41,6 +42,7 @@ export const validateFindProfile = checkSchema(
       custom: {
         options: (value) => customQueryValidator(value, stringSchema),
       },
+      optional: true,
     },
     capital: {
       customSanitizer: {
