@@ -1,7 +1,7 @@
 import { IInterceptorArgs } from "interfaces";
 import { transformResponse } from ".";
 describe("Testing response Interceptor", () => {
-  let response: IInterceptorArgs;
+  let response: IInterceptorArgs<{ _id: string; first_name: string }>;
   const objectBody = {
     _id: "aawd",
     first_name: "Smith",
@@ -29,8 +29,7 @@ describe("Testing response Interceptor", () => {
 
   it("It should support array of objects body.", () => {
     const arrayOfObjects = [objectBody, objectBody];
-    response.body = arrayOfObjects;
-    const result = transformResponse(response);
+    const result = transformResponse({ ...response, body: arrayOfObjects });
     expect(result.data.length).toEqual(arrayOfObjects.length);
     expect(result.data[0]._id).toBeDefined();
     expect(result.data[0].first_name).toBeDefined();

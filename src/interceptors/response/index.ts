@@ -1,9 +1,9 @@
 import { IInterceptorArgs, IResponseInterceptorRType } from "interfaces";
 
-export const transformResponse = ({
+export const transformResponse = <T>({
   body,
   statusCode,
-}: IInterceptorArgs): IResponseInterceptorRType => ({
+}: IInterceptorArgs<T>): IResponseInterceptorRType<T> => ({
   error: false,
   code: statusCode,
   data: body,

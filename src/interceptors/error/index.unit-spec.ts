@@ -1,7 +1,7 @@
 import { IInterceptorArgs } from "interfaces";
 import { transformErrorResponse } from ".";
 describe("Testing error Interceptor", () => {
-  let response: IInterceptorArgs;
+  let response: IInterceptorArgs<{ reason: string }>;
   beforeEach(() => {
     response = {
       statusCode: 400,
@@ -20,14 +20,7 @@ describe("Testing error Interceptor", () => {
   });
   it("It should support object body.", () => {
     const result = transformErrorResponse(response);
+    expect(result.errorDetails).toBeDefined();
     expect(result.errorDetails.reason).toBeDefined();
-  });
-
-  it("It should support string body.", () => {
-    const bodyString = "Errrorrr";
-    response.body = bodyString;
-    const result = transformErrorResponse(response);
-    expect(result.errorDetails.message).toBeDefined();
-    expect(result.errorDetails.message).toEqual(bodyString);
   });
 });

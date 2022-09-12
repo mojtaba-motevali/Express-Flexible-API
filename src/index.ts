@@ -6,10 +6,10 @@ import { ALLOWED_ORIGINS, DB_URL, NODE_ENV, SERVICE_PORT } from "utils/config";
 import { connectToDatabase } from "utils/database";
 import cors from "cors";
 import { overrideExpressJson } from "utils/common";
-import swaggerUi from "swagger-ui-express";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { bootstrap } from "inversify.config";
 import "api";
+import swaggerUi from "swagger-ui-express";
 
 const _app = express();
 overrideExpressJson(_app.response);
@@ -25,22 +25,25 @@ inversifyApp.setConfig((config) => {
       origin: ALLOWED_ORIGINS,
     })
   );
+
   config.use(bodyParser.json());
   config.use(bodyParser.urlencoded({ extended: false }));
-  config.use(express.static("public"));
+
   if (NODE_ENV === "dev") {
-    config.use(
-      "/docs",
-      swaggerUi.serve,
-      swaggerUi.setup(undefined, {
-        swaggerOptions: {
-          url: "/swagger.json",
-        },
-      })
-    );
   }
 });
 const app = inversifyApp.build();
+console.log("app", app);
+app.use(express.static("public"));
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(undefined, {
+    swaggerOptions: {
+      url: "/swagger.json",
+    },
+  })
+);
 app.listen(SERVICE_PORT, async () => {
   console.log(`Server started to listen on ${SERVICE_PORT}`);
   await connectToDatabase(DB_URL);

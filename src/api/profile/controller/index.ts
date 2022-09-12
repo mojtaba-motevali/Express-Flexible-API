@@ -19,7 +19,7 @@ export class ProfileController {
         .status(201)
         .json(await this.profileService.createProfile(body.profiles));
     } catch (err) {
-      res.status(400).json(err.message);
+      res.status(400).json(err);
     }
   }
 
@@ -42,7 +42,7 @@ export class ProfileController {
         .status(200)
         .json(await this.profileService.findProfilesService({ ...query }));
     } catch (err) {
-      res.status(400).json(err.message);
+      res.status(400).json(err);
     }
   }
 }

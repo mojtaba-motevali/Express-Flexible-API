@@ -8,14 +8,17 @@ import { ICreateFavorites } from "../dto";
 import { Favorite, TFavorite } from "../model";
 import { FavoriteService } from "../service";
 import { validateFavoriteCreation, validateFindFavorites } from "../validators";
+import { Get, Post, Route } from "tsoa";
 
+@Route("favorites")
 @controller("/favorites")
 export class FavoriteController {
   @inject(FavoriteService) private favoriteService: FavoriteService;
 
   @httpPost("/", validate(validateFavoriteCreation))
+  @Post()
   async createFavorites(
-    { body }: Request<any, any, { favorites: ICreateFavorites[] }>,
+    { body }: { body: { favorites: ICreateFavorites[] } },
     res: Response
   ) {
     try {
@@ -23,10 +26,11 @@ export class FavoriteController {
         .status(201)
         .json(await this.favoriteService.createFavorites(body.favorites));
     } catch (err) {
-      res.status(400).json(err.message);
+      res.status(400).json(err);
     }
   }
 
+  @Get()
   @httpGet(
     "/",
     validate([
@@ -54,7 +58,7 @@ export class FavoriteController {
         })
       );
     } catch (err) {
-      res.status(400).json(err.message);
+      res.status(400).json(err);
     }
   }
 }

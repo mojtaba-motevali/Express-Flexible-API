@@ -1,21 +1,16 @@
-export type TBody = any;
-export interface IBaseInterceptorRType {
+export class IBaseInterceptorRType {
   code: number;
   error: boolean;
 }
-export interface IInterceptorArgs {
+export class IInterceptorArgs<T> {
   statusCode: number;
-  body: TBody;
+  body: T;
 }
 
-export interface IErrorInterceptorRType extends IBaseInterceptorRType {
-  errorDetails:
-    | {
-        message: string;
-      }
-    | TBody;
+export class IErrorInterceptorRType<T> extends IBaseInterceptorRType {
+  errorDetails: T;
 }
 
-export interface IResponseInterceptorRType extends IBaseInterceptorRType {
-  data: TBody;
+export class IResponseInterceptorRType<T> extends IBaseInterceptorRType {
+  data: T;
 }
