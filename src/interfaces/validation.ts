@@ -4,6 +4,7 @@ export interface IEnvSchema {
   SERVICE_PORT: number;
   DB_URL: string;
   ALLOWED_ORIGINS: string[];
+  NODE_ENV: "dev" | "prod";
 }
 
 export interface ICommonValidation<T> {
