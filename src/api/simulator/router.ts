@@ -16,7 +16,10 @@ const simulatorRouter = express.Router();
 simulatorRouter.get(
   "/",
   validate([
-    ...queryValidatorSchema(Object.keys(Simulator.schema.obj)),
+    ...queryValidatorSchema([
+      ...Object.keys(Simulator.schema.obj),
+      "created_at",
+    ]),
     ...validateFindSimulators,
   ]),
   findSimulatorController

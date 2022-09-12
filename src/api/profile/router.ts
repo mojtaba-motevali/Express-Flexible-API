@@ -10,7 +10,7 @@ const profileRouter = express.Router();
 profileRouter.get(
   "/",
   validate([
-    ...queryValidatorSchema(Object.keys(Profile.schema.obj)),
+    ...queryValidatorSchema([...Object.keys(Profile.schema.obj), "created_at"]),
     ...validateFindProfile,
   ]),
   findProfilesController
