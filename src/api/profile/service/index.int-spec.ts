@@ -1,14 +1,21 @@
 import assert from "assert";
 import { expect } from "expect";
+import { Container } from "inversify";
 import { DB_URL } from "utils/config";
 import { connectToDatabase, disconnectFromDatabse } from "utils/database";
-import { createProfileService, findProfilesService } from ".";
+import { ProfileService } from ".";
 import { ICreateProfileDto } from "../dto";
 import { Profile, TProfile } from "../model";
+import { ProfileRepository } from "../repository";
 
 describe("Testing Profile Service", () => {
+  let profileService: ProfileService;
   before(async () => {
     await connectToDatabase(DB_URL);
+    const container = new Container();
+    container.bind<ProfileRepository>(ProfileRepository).to(ProfileRepository);
+    container.bind<ProfileService>(ProfileService).to(ProfileService);
+    profileService = container.get(ProfileService);
   });
   after(async () => {
     await disconnectFromDatabse();
@@ -27,7 +34,7 @@ describe("Testing Profile Service", () => {
         divisa: "awd",
         prefered_cryptocurrency: "USD",
       };
-      const profile = await createProfileService([profileBody]);
+      const profile = await profileService.createProfile([profileBody]);
       expect(profile).toBeDefined();
       if (profile) {
         expect(profile[0]).toBeDefined();
@@ -46,7 +53,7 @@ describe("Testing Profile Service", () => {
         capital: 200,
       };
       const optionalFields = ["nickname", "divisa", "prefered_cryptocurrency"];
-      const profile = await createProfileService([profileBody]);
+      const profile = await profileService.createProfile([profileBody]);
       expect(profile).toBeDefined();
       if (profile) {
         expect(profile[0]._id).toBeDefined();
@@ -67,12 +74,12 @@ describe("Testing Profile Service", () => {
         divisa: "awd",
         prefered_cryptocurrency: "USD",
       };
-      const profile = await createProfileService([profileBody]);
+      const profile = await profileService.createProfile([profileBody]);
       expect(profile).toBeDefined();
       if (profile) {
         let message = null;
         try {
-          await createProfileService([profileBody]);
+          await profileService.createProfile([profileBody]);
         } catch (err) {
           message = err.message;
         }
@@ -94,7 +101,7 @@ describe("Testing Profile Service", () => {
       };
       let message = null;
       try {
-        await createProfileService([profileBody, profileBody]);
+        await profileService.createProfile([profileBody, profileBody]);
       } catch (err) {
         message = err.message;
       }
@@ -133,13 +140,13 @@ describe("Testing Profile Service", () => {
       },
     ];
     before(async () => {
-      await createProfileService(profiles);
+      await profileService.createProfile(profiles);
     });
     after(async () => {
       await Profile.deleteMany({});
     });
     it("It should successfully fetch Profiles and all required fields should exist.", async () => {
-      const result = await findProfilesService({
+      const result = await profileService.findProfilesService({
         limit: 1,
         page: 1,
       });
@@ -151,7 +158,7 @@ describe("Testing Profile Service", () => {
       });
     });
     it("It should successfully fetches profile with email filter.", async () => {
-      const result = await findProfilesService({
+      const result = await profileService.findProfilesService({
         email: ["smith@gmail.com", "someone@gmail.com"],
         limit: 1,
         page: 1,
@@ -161,7 +168,7 @@ describe("Testing Profile Service", () => {
       assert.equal(result.rows[0].email, profiles[0].email);
     });
     it("It should successfully fetch Profiles with prefered_cryptocurrency filter", async () => {
-      const result = await findProfilesService({
+      const result = await profileService.findProfilesService({
         prefered_cryptocurrency: "BTC",
         limit: 1,
         page: 1,
@@ -171,7 +178,7 @@ describe("Testing Profile Service", () => {
       assert.equal(result.rows[0].email, profiles[1].email);
     });
     it("It should successfully fetch Profiles with capital filter", async () => {
-      const result = await findProfilesService({
+      const result = await profileService.findProfilesService({
         capital: 201,
         limit: 1,
         page: 1,
@@ -181,7 +188,7 @@ describe("Testing Profile Service", () => {
       assert.equal(result.rows[0].email, profiles[1].email);
     });
     it("It should successfully fetch profiles that don't exist", async () => {
-      const result = await findProfilesService({
+      const result = await profileService.findProfilesService({
         capital: 2000,
         limit: 1,
         page: 1,

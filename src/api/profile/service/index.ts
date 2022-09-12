@@ -1,38 +1,42 @@
 import { IFindQueryRTypeDto } from "interfaces";
+import { inject, injectable } from "inversify";
 import { IFindDTOArgs } from "types";
-import { ICreateProfileDto, IFindProfileDtoArgs } from "../dto";
+import { ICreateProfileDto } from "../dto";
 import { TProfile } from "../model";
-import { createProfileEntity, findProfilesEntity } from "../repository";
+import { ProfileRepository } from "../repository";
 
-export const createProfileService = async (params: ICreateProfileDto[]) => {
-  {
-    const newSet = new Set();
-    for (const { email } of params) {
-      if (newSet.has(email)) {
-        throw new Error(`Profile with ${email} email already exists.`);
-      }
-      newSet.add(email);
-    }
-  }
-  const result = await findProfilesEntity(
+@injectable()
+export class ProfileService {
+  @inject(ProfileRepository) private repository: ProfileRepository;
+  async createProfile(params: ICreateProfileDto[]) {
     {
-      email: params.map(({ email }) => email),
-      limit: 1,
-      page: 1,
-    },
-    { email: 1 },
-    false
-  );
-  if (result.rows.length > 0) {
-    throw new Error(
-      `Profile with ${result.rows[0].email} email already exists.`
+      const newSet = new Set();
+      for (const { email } of params) {
+        if (newSet.has(email)) {
+          throw new Error(`Profile with ${email} email already exists.`);
+        }
+        newSet.add(email);
+      }
+    }
+    const result = await this.repository.find(
+      {
+        email: params.map(({ email }) => email),
+        limit: 1,
+        page: 1,
+      },
+      { email: 1 },
+      false
     );
+    if (result.rows.length > 0) {
+      throw new Error(
+        `Profile with ${result.rows[0].email} email already exists.`
+      );
+    }
+    return await this.repository.create(params);
   }
-  return await createProfileEntity(params);
-};
-
-export const findProfilesService = async (
-  params: IFindDTOArgs<TProfile>
-): Promise<IFindQueryRTypeDto<Partial<TProfile>>> => {
-  return findProfilesEntity({ ...params }, {}, true);
-};
+  async findProfilesService(
+    params: IFindDTOArgs<TProfile>
+  ): Promise<IFindQueryRTypeDto<Partial<TProfile>>> {
+    return this.repository.find({ ...params }, {}, true);
+  }
+}

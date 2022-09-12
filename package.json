@@ -7,7 +7,8 @@
     "dev": "npx nodemon --watch \"src/**\" --ext \"ts,json\" --ignore \"src/**/*-spec.ts\" --exec \"ts-node src/index.ts\"",
     "test:unit": "npx jest --config jest.json",
     "test:int": "npx ts-mocha -p ./tsconfig.json -j 1 --paths src/**/*.int-spec.ts",
-    "test:int-w": "npx ts-mocha -p ./tsconfig.json --paths  -w src/**/*.int-spec.ts"
+    "test:int-w": "npx ts-mocha -p ./tsconfig.json --paths  -w src/**/*.int-spec.ts",
+    "swagger": "tsoa spec"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "@types/mongoose": "^5.11.97",
     "@types/mongoose-delete": "^0.5.9",
     "@types/node": "^18.7.16",
+    "@types/swagger-ui-express": "^4.1.3",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "eslint": "^8.0.1",
     "eslint-config-standard-with-typescript": "^22.0.0",
@@ -50,9 +52,12 @@
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "express-validator": "^6.14.2",
+    "inversify": "^6.0.1",
+    "inversify-express-utils": "^6.4.3",
     "joi": "^17.6.0",
     "mongoose": "^6.5.5",
     "mongoose-delete": "^0.5.4",
+    "reflect-metadata": "^0.1.13",
     "swagger-ui-express": "^4.5.0",
     "tsoa": "^4.1.2"
   }

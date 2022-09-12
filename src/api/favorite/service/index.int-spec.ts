@@ -1,17 +1,25 @@
 import { Profile, TProfile } from "api/profile/model";
-import { createProfileService } from "api/profile/service";
+import { ProfileService } from "api/profile/service";
 import assert from "assert";
 import { expect } from "expect";
+import { Container } from "inversify";
 import { Types } from "mongoose";
 import { DB_URL } from "utils/config";
 import { connectToDatabase, disconnectFromDatabse } from "utils/database";
-import { createFavoritesService, findFavoriteService } from ".";
+import { FavoriteService } from ".";
 import { ICreateFavorites } from "../dto";
 import { Favorite, TFavorite } from "../model";
 
 describe("Testing Favorite Service", () => {
+  let profileService: ProfileService;
+  let favoriteService: FavoriteService;
   before(async () => {
     await connectToDatabase(DB_URL);
+    const container = new Container();
+    container.bind<ProfileService>(ProfileService).to(ProfileService);
+    container.bind<FavoriteService>(FavoriteService).to(FavoriteService);
+    profileService = container.get(ProfileService);
+    favoriteService = container.get(FavoriteService);
   });
   after(async () => {
     await disconnectFromDatabse();
@@ -21,7 +29,7 @@ describe("Testing Favorite Service", () => {
     before(async () => {
       await Profile.deleteMany({});
       profile = (
-        await createProfileService([
+        await profileService.createProfile([
           {
             first_name: "John",
             last_name: "Smith",
@@ -46,7 +54,7 @@ describe("Testing Favorite Service", () => {
         name: "My Favorite",
         favorites: ["Hi hI", "Hello"],
       };
-      const favorite = await createFavoritesService([favoriteBody]);
+      const favorite = await favoriteService.createFavorites([favoriteBody]);
       expect(favorite).toBeDefined();
       if (favorite) {
         expect(favorite[0]).toBeDefined();
@@ -63,7 +71,7 @@ describe("Testing Favorite Service", () => {
     let favorites: TFavorite[];
     let profileIds: Types.ObjectId[];
     before(async () => {
-      const [profile1, profile2] = await createProfileService([
+      const [profile1, profile2] = await profileService.createProfile([
         {
           first_name: "John",
           last_name: "Smith",
@@ -85,7 +93,7 @@ describe("Testing Favorite Service", () => {
       ]);
       if (profile1._id && profile2._id) {
         profileIds = [profile1._id, profile2._id];
-        favorites = await createFavoritesService([
+        favorites = await favoriteService.createFavorites([
           {
             profile_id: profile1._id,
             name: "My Favorite 1",
@@ -109,7 +117,7 @@ describe("Testing Favorite Service", () => {
       await Profile.deleteMany({});
     });
     it("It should successfully fetch favorites and all required fields should exist.", async () => {
-      const result = await findFavoriteService({
+      const result = await favoriteService.findFavorites({
         withProfile: false,
         limit: 1,
         page: 1,
@@ -123,7 +131,7 @@ describe("Testing Favorite Service", () => {
       });
     });
     it("It should successfully fetches favorites with selected profile ids filter.", async () => {
-      const result = await findFavoriteService({
+      const result = await favoriteService.findFavorites({
         profile_id: {
           $in: profileIds,
         },
@@ -135,7 +143,7 @@ describe("Testing Favorite Service", () => {
       assert.equal(result.rows.length, 1);
     });
     it("It should successfully fetch favorites with favorites list filter", async () => {
-      const result = await findFavoriteService({
+      const result = await favoriteService.findFavorites({
         withProfile: false,
         favorites: {
           $in: [favorites[1].favorites[0]],

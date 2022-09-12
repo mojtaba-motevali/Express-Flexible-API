@@ -1,25 +1,48 @@
 import { Request, Response } from "express";
-import { IFindProfileDtoArgs } from "../dto";
-import { createProfileService, findProfilesService } from "../service";
+import { inject } from "inversify";
+import { controller, httpGet, httpPost } from "inversify-express-utils";
+import { IFindDTOArgs } from "types";
+import { queryValidatorSchema } from "utils/common";
+import { validate } from "middlewares";
+import { Profile, TProfile } from "../model";
+import { ProfileService } from "../service";
+import { validateFindProfile, validateProfileCreation } from "../validators";
 
-export const createProfileController = async (
-  { body }: Request,
-  res: Response
-) => {
-  try {
-    res.status(201).json(await createProfileService(body.profiles));
-  } catch (err) {
-    res.status(400).json(err.message);
-  }
-};
+@controller("/profiles")
+export class ProfileController {
+  @inject(ProfileService) private profileService: ProfileService;
 
-export const findProfilesController = async (
-  { query }: Request & { query: IFindProfileDtoArgs },
-  res: Response
-) => {
-  try {
-    res.status(200).json(await findProfilesService({ ...query }));
-  } catch (err) {
-    res.status(400).json(err.message);
+  @httpPost("/", validate(validateProfileCreation))
+  async createProfile({ body }: Request, res: Response) {
+    try {
+      res
+        .status(201)
+        .json(await this.profileService.createProfile(body.profiles));
+    } catch (err) {
+      res.status(400).json(err.message);
+    }
   }
-};
+
+  @httpGet(
+    "/",
+    validate([
+      ...queryValidatorSchema([
+        ...Object.keys(Profile.schema.obj),
+        "created_at",
+      ]),
+      ...validateFindProfile,
+    ])
+  )
+  async findProfiles(
+    { query }: Request & { query: IFindDTOArgs<TProfile> },
+    res: Response
+  ) {
+    try {
+      res
+        .status(200)
+        .json(await this.profileService.findProfilesService({ ...query }));
+    } catch (err) {
+      res.status(400).json(err.message);
+    }
+  }
+}

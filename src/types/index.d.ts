@@ -11,3 +11,7 @@ export type IFindDTOArgs<T> = Partial<{
     | { $in: T[key][] };
 }> &
   IQueryDto;
+
+export type IFindSelectFieldsArgs<T> = {
+  [Property in keyof T]: number;
+};
