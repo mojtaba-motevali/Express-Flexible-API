@@ -16,7 +16,7 @@ export const validateFavoriteCreation = checkSchema(
       trim: true,
       isLength: {
         options: { min: 3, max: 200 },
-        errorMessage: `name length should be between 3 and 10 characters.`,
+        errorMessage: `name length should be between 3 and 200 characters.`,
       },
     },
     "favorites.*.favorites": {
@@ -26,7 +26,7 @@ export const validateFavoriteCreation = checkSchema(
       },
       customSanitizer: {
         options: (value) =>
-          Array.isArray(value) ? value.forEach((val) => val.trim()) : value,
+          Array.isArray(value) ? value.map((val) => val.trim()) : value,
       },
     },
   },

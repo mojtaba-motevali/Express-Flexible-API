@@ -8,9 +8,9 @@ import {
 import { Favorite } from "./model";
 import { validateFavoriteCreation, validateFindFavorites } from "./validators";
 
-const simulatorRouter = express.Router();
+const favoriteRouter = express.Router();
 
-simulatorRouter.get(
+favoriteRouter.get(
   "/",
   validate([
     ...queryValidatorSchema([
@@ -22,10 +22,10 @@ simulatorRouter.get(
   findSimulatorController
 );
 
-simulatorRouter.post(
+favoriteRouter.post(
   "/",
   validate(validateFavoriteCreation),
   createSimulatorController
 );
 
-export default simulatorRouter;
+export default favoriteRouter;
