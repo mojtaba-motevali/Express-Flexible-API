@@ -1,5 +1,5 @@
-import { IEnvSchema } from "interfaces";
 import Joi from "joi";
+import { IEnvSchema } from "../../interfaces";
 import { numberSchema, stringSchema } from "../validator";
 
 export const EnvValidator = Joi.object<IEnvSchema>({

@@ -1,7 +1,4 @@
 {
-  "ts-node": {
-    "require": ["tsconfig-paths/register"]
-  },
   "compilerOptions": {
     "module": "commonjs",
     "types": ["reflect-metadata","express","node","mocha","jest"],
@@ -10,7 +7,7 @@
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "incremental": true,
     "alwaysStrict": true,
     "skipLibCheck": true,
