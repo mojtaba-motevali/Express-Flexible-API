@@ -1,10 +1,6 @@
 import { checkSchema } from "express-validator";
 import { Types } from "mongoose";
-import {
-  customQueryRegexSanizer,
-  customQuerySanizier,
-  customQueryValidator,
-} from "utils/common";
+import { customQuerySanitizer, customQueryValidator } from "utils/common";
 import {
   dateSchema,
   emailSchema,
@@ -29,7 +25,7 @@ export const validateFindProfile = checkSchema(
     _id: {
       customSanitizer: {
         options: (value) =>
-          customQuerySanizier<Types.ObjectId>(value, Types.ObjectId as any),
+          customQuerySanitizer<Types.ObjectId>(value, Types.ObjectId as any),
       },
       custom: {
         options: (value) => customQueryValidator(value, objectIdSchema),
@@ -38,7 +34,7 @@ export const validateFindProfile = checkSchema(
     },
     full_name: {
       customSanitizer: {
-        options: (value) => customQueryRegexSanizer(value),
+        options: (value) => customQuerySanitizer(value, String),
       },
       custom: {
         options: (value) => customQueryValidator(value, stringSchema),
@@ -47,7 +43,7 @@ export const validateFindProfile = checkSchema(
     },
     capital: {
       customSanitizer: {
-        options: (value) => customQuerySanizier(value, Number),
+        options: (value) => customQuerySanitizer(value, Number),
       },
       custom: {
         options: (value) => customQueryValidator(value, numberSchema),
@@ -56,7 +52,7 @@ export const validateFindProfile = checkSchema(
     },
     email: {
       customSanitizer: {
-        options: (value) => customQuerySanizier(value, String),
+        options: (value) => customQuerySanitizer(value, String),
       },
       custom: {
         options: (value) => customQueryValidator(value, emailSchema),
@@ -65,7 +61,7 @@ export const validateFindProfile = checkSchema(
     },
     divisa: {
       customSanitizer: {
-        options: (value) => customQuerySanizier(value, Number),
+        options: (value) => customQuerySanitizer(value, Number),
       },
       custom: {
         options: (value) => customQueryValidator(value, numberSchema),
@@ -74,7 +70,7 @@ export const validateFindProfile = checkSchema(
     },
     prefered_cryptocurrency: {
       customSanitizer: {
-        options: (value) => customQuerySanizier(value, String),
+        options: (value) => customQuerySanitizer(value, String),
       },
       custom: {
         options: (value) => customQueryValidator(value, stringSchema),
@@ -83,7 +79,7 @@ export const validateFindProfile = checkSchema(
     },
     created_at: {
       customSanitizer: {
-        options: (value) => customQuerySanizier(value, (v) => new Date(v)),
+        options: (value) => customQuerySanitizer(value, (v) => new Date(v)),
       },
       custom: {
         options: (value) => customQueryValidator(value, dateSchema),

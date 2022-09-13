@@ -63,10 +63,7 @@ export const queryValidatorSchema = (sortWhitelist: string[]) =>
     },
   });
 
-export const customQueryRegexSanizer = (value: string) => ({
-  $regex: value,
-});
-export const customQuerySanizier = <T>(
+export const customQuerySanitizer = <T>(
   value: string,
   cast: (value: string) => T
 ) => {
@@ -85,6 +82,10 @@ export const customQuerySanizier = <T>(
     } else if (value.includes(",")) {
       return {
         $in: value.split(",").map((item) => cast(item)),
+      };
+    } else if (value.charAt(0) == "%") {
+      return {
+        $regex: cast(value),
       };
     } else {
       return cast(value);

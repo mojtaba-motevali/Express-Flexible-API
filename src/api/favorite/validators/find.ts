@@ -1,10 +1,6 @@
 import { checkSchema } from "express-validator";
 import { Types } from "mongoose";
-import {
-  customQueryRegexSanizer,
-  customQuerySanizier,
-  customQueryValidator,
-} from "utils/common";
+import { customQuerySanitizer, customQueryValidator } from "utils/common";
 import { dateSchema, objectIdSchema, stringSchema } from "utils/validator";
 
 export const validateFindFavorites = checkSchema(
@@ -12,7 +8,7 @@ export const validateFindFavorites = checkSchema(
     profile_id: {
       customSanitizer: {
         options: (value) =>
-          customQuerySanizier<Types.ObjectId>(value, Types.ObjectId as any),
+          customQuerySanitizer<Types.ObjectId>(value, Types.ObjectId as any),
       },
       custom: {
         options: (value) => customQueryValidator(value, objectIdSchema),
@@ -22,7 +18,7 @@ export const validateFindFavorites = checkSchema(
     _id: {
       customSanitizer: {
         options: (value) =>
-          customQuerySanizier<Types.ObjectId>(value, Types.ObjectId as any),
+          customQuerySanitizer<Types.ObjectId>(value, Types.ObjectId as any),
       },
       custom: {
         options: (value) => customQueryValidator(value, objectIdSchema),
@@ -38,7 +34,7 @@ export const validateFindFavorites = checkSchema(
     },
     name: {
       customSanitizer: {
-        options: (value) => customQueryRegexSanizer(value),
+        options: (value) => customQuerySanitizer(value, String),
       },
       custom: {
         options: (value) => customQueryValidator(value, stringSchema),
@@ -48,7 +44,7 @@ export const validateFindFavorites = checkSchema(
     favorites: {
       customSanitizer: {
         options: (value) => {
-          const result = customQuerySanizier(value, String);
+          const result = customQuerySanitizer(value, String);
           return typeof result === "string"
             ? {
                 $in: result,
@@ -63,7 +59,7 @@ export const validateFindFavorites = checkSchema(
     },
     created_at: {
       customSanitizer: {
-        options: (value) => customQuerySanizier(value, (v) => new Date(v)),
+        options: (value) => customQuerySanitizer(value, (v) => new Date(v)),
       },
       custom: {
         options: (value) => customQueryValidator(value, dateSchema),

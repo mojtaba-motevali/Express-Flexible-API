@@ -8,7 +8,12 @@ import { ICreateFavorites } from "../dto";
 import { FavoriteSchemaKeys, TFavorite } from "../model";
 import { FavoriteService } from "../service";
 import { validateFavoriteCreation, validateFindFavorites } from "../validators";
-import { ApiOperationGet, ApiOperationPost, ApiPath } from "swagger-express-ts";
+import {
+  ApiOperationGet,
+  ApiOperationPost,
+  ApiPath,
+  SwaggerDefinitionConstant,
+} from "swagger-express-ts";
 import {
   CreateArgsType,
   CreateFavoriteError,
@@ -75,17 +80,20 @@ export class FavoriteController {
     summary: "Get versions list",
     parameters: {
       query: {
-        ...FavoriteSchemaKeys.filter((field) => field !== "created_at").reduce(
-          (obj, key) => {
-            obj[key] = {
-              description: `filter based on favorites' ${key} that are separated by comma.`,
-              type: "string",
-              required: false,
-            };
-            return obj;
-          },
-          {}
-        ),
+        ...FavoriteSchemaKeys.filter(
+          (field) => !["created_at", "name"].includes(field)
+        ).reduce((obj, key) => {
+          obj[key] = {
+            description: `filter based on favorites' ${key} that are separated by comma.`,
+            type: "string",
+            required: false,
+          };
+          return obj;
+        }, {}),
+        name: {
+          description:
+            "Specify %name to search using regex. \n\n Specify list of names separated by comma (,) to search within names ",
+        },
         created_at: {
           description:
             "filter based on favorite's created date." +
@@ -98,12 +106,22 @@ export class FavoriteController {
           required: false,
           type: "number",
         },
+        limit: {
+          description: "This field is used to limit data from server.",
+          required: true,
+          type: SwaggerDefinitionConstant.NUMBER,
+        },
+        page: {
+          description: "This field is used to paginate data from server.",
+          required: true,
+          type: SwaggerDefinitionConstant.NUMBER,
+        },
         sort: {
           description: `This field is used to sort based on allowed fields (${FavoriteSchemaKeys.join(
             " , "
-          )} ). use minus (-) to specify DESC otherwise it's ASC.`,
+          )} ). specify fields separated by comma (,) and use minus (-) at the beginning of field to specify DESC otherwise it's ASC.`,
           required: false,
-          type: "string",
+          type: SwaggerDefinitionConstant.STRING,
         },
       },
     },

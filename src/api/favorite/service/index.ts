@@ -16,7 +16,10 @@ export class FavoriteService {
     params: IFindDTOArgs<TFavorite> & { withProfile: boolean }
   ): Promise<IFindQueryRTypeDto<Partial<TFavorite>>> {
     try {
-      const { withProfile, ...rest } = params;
+      const { withProfile, name, ...rest } = params;
+      if (name && name.$regex !== undefined) {
+        name.$regex = new RegExp(name.$regex);
+      }
       return this.repository.find(
         { ...rest },
         {
