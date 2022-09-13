@@ -1,16 +1,14 @@
-export class IBaseInterceptorRType {
+export interface IBaseInterceptorRType {
   code: number;
   error: boolean;
 }
-export class IInterceptorArgs<T> {
+export interface IInterceptorArgs<T> {
   statusCode: number;
   body: T;
 }
-
-export class IErrorInterceptorRType<T> extends IBaseInterceptorRType {
+export interface IErrorInterceptorRType<T> extends IBaseInterceptorRType {
   errorDetails: T;
 }
-
-export class IResponseInterceptorRType<T> extends IBaseInterceptorRType {
+export interface IResponseInterceptorRType<T> extends IBaseInterceptorRType {
   data: T;
 }

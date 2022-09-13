@@ -1,4 +1,6 @@
-export interface IQueryDto<T> {
+import { ApiModel } from "swagger-express-ts";
+
+export class IQueryDto<T> {
   page: number;
   limit: number;
   sort: {
@@ -6,7 +8,7 @@ export interface IQueryDto<T> {
   };
 }
 
-export interface IFindQueryRTypeDto<T> {
+export class IFindQueryRTypeDto<T> {
   rows: T[];
   count?: number;
 }

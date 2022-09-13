@@ -1,0 +1,57 @@
+openapi: 3.0.0
+info:
+  title: "API"
+  version: "1.0.0"
+components:
+  schemas:
+    Query:
+      properties:
+        limit: 
+          type: number
+        page: 
+          type: number
+      required:
+        - limit
+        - page
+paths:
+  /api/favorites:
+    get:
+      parameters:
+        - name: _id
+          in: query
+          required: false
+          description: array of favorite ids separated by comma ( , ) to search.
+          schema:
+            type: array
+            
+        - name: profile_id
+          in: query
+          required: false
+          description: array of profile ids separated by comma ( , ) to search.
+          schema:
+            type: array
+        - name: name
+          in: query
+          required: false
+          description: array of names separated by comma ( , ) to search.
+          schema:
+            type: array
+        - name: profile_included
+          in: query 
+          description: specify 1 if you want to include profile information in the response.
+          required: false
+          schema:
+            type: number
+        - name: favorites
+          in: query
+          required: false
+          description: array of favorites separated by comma ( , ) to search.
+          schema:
+            type: array
+      operationId: favorites
+      summary: Get favorites 
+      tags: [ 'favorites' ]
+      responses:
+        '200':
+          description: OK
+

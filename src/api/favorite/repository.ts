@@ -7,7 +7,10 @@ import { Favorite, TFavorite } from "./model";
 
 @injectable()
 export class FavoriteRepository implements IRepository<TFavorite> {
-  async create(params: TFavorite[], session: null | ClientSession = null) {
+  async create(
+    params: TFavorite[],
+    session: null | ClientSession = null
+  ): Promise<TFavorite[]> {
     return Favorite.insertMany(params, { lean: true, session });
   }
   async find(

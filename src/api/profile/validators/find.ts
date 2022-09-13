@@ -6,6 +6,7 @@ import {
   customQueryValidator,
 } from "utils/common";
 import {
+  dateSchema,
   emailSchema,
   numberSchema,
   objectIdSchema,
@@ -77,6 +78,15 @@ export const validateFindProfile = checkSchema(
       },
       custom: {
         options: (value) => customQueryValidator(value, stringSchema),
+      },
+      optional: true,
+    },
+    created_at: {
+      customSanitizer: {
+        options: (value) => customQuerySanizier(value, (v) => new Date(v)),
+      },
+      custom: {
+        options: (value) => customQueryValidator(value, dateSchema),
       },
       optional: true,
     },

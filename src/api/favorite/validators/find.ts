@@ -5,11 +5,21 @@ import {
   customQuerySanizier,
   customQueryValidator,
 } from "utils/common";
-import { objectIdSchema, stringSchema } from "utils/validator";
+import { dateSchema, objectIdSchema, stringSchema } from "utils/validator";
 
 export const validateFindFavorites = checkSchema(
   {
     profile_id: {
+      customSanitizer: {
+        options: (value) =>
+          customQuerySanizier<Types.ObjectId>(value, Types.ObjectId as any),
+      },
+      custom: {
+        options: (value) => customQueryValidator(value, objectIdSchema),
+      },
+      optional: true,
+    },
+    _id: {
       customSanitizer: {
         options: (value) =>
           customQuerySanizier<Types.ObjectId>(value, Types.ObjectId as any),
@@ -48,6 +58,15 @@ export const validateFindFavorites = checkSchema(
       },
       custom: {
         options: (value) => customQueryValidator(value, stringSchema),
+      },
+      optional: true,
+    },
+    created_at: {
+      customSanitizer: {
+        options: (value) => customQuerySanizier(value, (v) => new Date(v)),
+      },
+      custom: {
+        options: (value) => customQueryValidator(value, dateSchema),
       },
       optional: true,
     },

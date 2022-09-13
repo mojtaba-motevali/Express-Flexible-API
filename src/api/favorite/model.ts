@@ -1,8 +1,6 @@
-import mongoose, { ObjectId, Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import MongooseDelete from "mongoose-delete";
-
-const { Schema } = mongoose;
-
+import { Types } from "mongoose";
 const schema = new Schema(
   {
     profile_id: {
@@ -29,10 +27,17 @@ schema.plugin(MongooseDelete, {
   deletedAt: true,
 });
 export const Favorite = mongoose.model("Favorites", schema);
-
 export type TFavorite = {
-  _id?: Types.ObjectId;
+  _id: Types.ObjectId;
   profile_id?: Types.ObjectId;
   name: string;
   favorites: string[];
+  created_at: Date;
+  updated_at: Date;
 };
+
+export const FavoriteSchemaKeys = [
+  ...Object.keys(Favorite.schema.obj),
+  "_id",
+  "created_at",
+];

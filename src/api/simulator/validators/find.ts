@@ -67,6 +67,15 @@ export const validateFindSimulators = checkSchema(
       },
       optional: true,
     },
+    created_at: {
+      customSanitizer: {
+        options: (value) => customQuerySanizier(value, (v) => new Date(v)),
+      },
+      custom: {
+        options: (value) => customQueryValidator(value, dateSchema),
+      },
+      optional: true,
+    },
   },
   ["query"]
 );

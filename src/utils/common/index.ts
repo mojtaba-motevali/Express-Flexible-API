@@ -7,6 +7,10 @@ import { enumSchema } from "utils/validator";
 export const overrideExpressJson = (response: Response) => {
   const json = response.json;
   response.json = function (body) {
+    console.log("body", body);
+    if (body.swagger) {
+      return json.call(this, body);
+    }
     if (typeof body === "string") throw new Error("string is not typeof json");
     const newBody = InterceptorJsonBody({
       statusCode: this.statusCode,

@@ -8,9 +8,7 @@ import cors from "cors";
 import { overrideExpressJson } from "utils/common";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { bootstrap } from "inversify.config";
-import "api";
-import swaggerUi from "swagger-ui-express";
-
+import * as swagger from "swagger-express-ts";
 const _app = express();
 overrideExpressJson(_app.response);
 const inversifyApp = new InversifyExpressServer(
@@ -25,25 +23,31 @@ inversifyApp.setConfig((config) => {
       origin: ALLOWED_ORIGINS,
     })
   );
-
+  config.use(
+    swagger.express({
+      path: "/api-docs/swagger.json",
+      definition: {
+        basePath: "/api",
+        info: {
+          title: "Backend-Test",
+          version: "1",
+        },
+      },
+    })
+  );
   config.use(bodyParser.json());
   config.use(bodyParser.urlencoded({ extended: false }));
+  config.use("/api-docs", express.static("swagger"));
+  config.use(
+    "/api-docs/swagger/assets",
+    express.static("node_modules/swagger-ui-dist")
+  );
 
   if (NODE_ENV === "dev") {
   }
 });
 const app = inversifyApp.build();
-console.log("app", app);
-app.use(express.static("public"));
-app.use(
-  "/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(undefined, {
-    swaggerOptions: {
-      url: "/swagger.json",
-    },
-  })
-);
+
 app.listen(SERVICE_PORT, async () => {
   console.log(`Server started to listen on ${SERVICE_PORT}`);
   await connectToDatabase(DB_URL);
