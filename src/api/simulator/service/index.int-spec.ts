@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { Profile, TProfile } from "api/profile/model";
 import { ProfileService } from "api/profile/service";
 import assert from "assert";
@@ -9,6 +11,8 @@ import { connectToDatabase, disconnectFromDatabse } from "utils/database";
 import { SimulatorService } from ".";
 import { ICreateSimulator } from "../dto";
 import { Simulator, TSimulator } from "../model";
+import { ProfileRepository } from "api/profile/repository";
+import { SimulatorRepository } from "../repository";
 
 describe("Testing Simulator Service", () => {
   let profileService: ProfileService;
@@ -16,8 +20,19 @@ describe("Testing Simulator Service", () => {
   before(async () => {
     await connectToDatabase(DB_URL);
     const container = new Container();
-    container.bind<ProfileService>(ProfileService).to(ProfileService);
-    container.bind<SimulatorService>(SimulatorService).to(SimulatorService);
+    container
+      .bind<SimulatorService>(SimulatorService)
+      .toSelf()
+      .inSingletonScope();
+    container
+      .bind<SimulatorRepository>(SimulatorRepository)
+      .toSelf()
+      .inSingletonScope();
+    container
+      .bind<ProfileRepository>(ProfileRepository)
+      .toSelf()
+      .inSingletonScope();
+    container.bind<ProfileService>(ProfileService).toSelf().inSingletonScope();
     profileService = container.get(ProfileService);
     simulatorService = container.get(SimulatorService);
   });

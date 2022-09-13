@@ -28,12 +28,12 @@ schema.plugin(MongooseDelete, {
 });
 export const Favorite = mongoose.model("Favorites", schema);
 export type TFavorite = {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
   profile_id?: Types.ObjectId;
   name: string;
   favorites: string[];
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
 };
 
 export const FavoriteSchemaKeys = [

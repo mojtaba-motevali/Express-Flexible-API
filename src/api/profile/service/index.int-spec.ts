@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import assert from "assert";
 import { expect } from "expect";
 import { Container } from "inversify";

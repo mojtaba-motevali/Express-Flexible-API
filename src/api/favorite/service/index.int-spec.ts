@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { Profile, TProfile } from "api/profile/model";
 import { ProfileService } from "api/profile/service";
 import assert from "assert";
@@ -9,6 +11,8 @@ import { connectToDatabase, disconnectFromDatabse } from "utils/database";
 import { FavoriteService } from ".";
 import { ICreateFavorites } from "../dto";
 import { Favorite, TFavorite } from "../model";
+import { ProfileRepository } from "api/profile/repository";
+import { FavoriteRepository } from "../repository";
 
 describe("Testing Favorite Service", () => {
   let profileService: ProfileService;
@@ -16,8 +20,19 @@ describe("Testing Favorite Service", () => {
   before(async () => {
     await connectToDatabase(DB_URL);
     const container = new Container();
-    container.bind<ProfileService>(ProfileService).to(ProfileService);
-    container.bind<FavoriteService>(FavoriteService).to(FavoriteService);
+    container
+      .bind<ProfileRepository>(ProfileRepository)
+      .toSelf()
+      .inSingletonScope();
+    container
+      .bind<FavoriteRepository>(FavoriteRepository)
+      .toSelf()
+      .inSingletonScope();
+    container.bind<ProfileService>(ProfileService).toSelf().inSingletonScope();
+    container
+      .bind<FavoriteService>(FavoriteService)
+      .toSelf()
+      .inSingletonScope();
     profileService = container.get(ProfileService);
     favoriteService = container.get(FavoriteService);
   });
