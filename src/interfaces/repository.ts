@@ -1,4 +1,4 @@
-import { IFindDTOArgs, IFindSelectFieldsArgs } from "types";
+import { IFindDTOArgs, IFindSelectFieldsArgs } from "../types";
 import { IFindQueryRTypeDto } from "./query";
 
 export interface IRepository<T> {

@@ -1,4 +1,4 @@
-import mongoose, { ObjectId, Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import MongooseDelete from "mongoose-delete";
 
 const { Schema } = mongoose;

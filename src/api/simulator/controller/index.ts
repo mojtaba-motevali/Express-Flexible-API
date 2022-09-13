@@ -1,16 +1,12 @@
 import { Request, Response } from "express";
 import { inject } from "inversify";
 import { controller, httpGet, httpPost } from "inversify-express-utils";
-import { IFindDTOArgs } from "types";
-import { queryValidatorSchema } from "utils/common";
-import { validate } from "middlewares";
 import { Simulator, SimulatorSchemaKeys, TSimulator } from "../model";
 import { SimulatorService } from "../service";
 import {
   validateFindSimulators,
   validateSimulatorCreation,
 } from "../validators";
-import { ValidationError } from "api/docs";
 import {
   ApiOperationGet,
   ApiOperationPost,
@@ -22,6 +18,10 @@ import {
   CreateSimulatorRType,
   FindSimulatorRType,
 } from "../docs";
+import { ValidationError } from "../../docs";
+import { validate } from "../../../middlewares";
+import { queryValidatorSchema } from "../../../utils/common";
+import { IFindDTOArgs } from "../../../types";
 
 @ApiPath({
   path: "/simulators",

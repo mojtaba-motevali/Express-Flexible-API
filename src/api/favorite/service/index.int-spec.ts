@@ -1,18 +1,21 @@
 import "reflect-metadata";
 
-import { Profile, TProfile } from "api/profile/model";
-import { ProfileService } from "api/profile/service";
 import assert from "assert";
 import { expect } from "expect";
 import { Container } from "inversify";
 import { Types } from "mongoose";
-import { DB_URL } from "utils/config";
-import { connectToDatabase, disconnectFromDatabse } from "utils/database";
 import { FavoriteService } from ".";
 import { ICreateFavorites } from "../dto";
 import { Favorite, TFavorite } from "../model";
-import { ProfileRepository } from "api/profile/repository";
 import { FavoriteRepository } from "../repository";
+import { ProfileService } from "../../profile/service";
+import {
+  connectToDatabase,
+  disconnectFromDatabse,
+} from "../../../utils/database";
+import { ProfileRepository } from "../../profile/repository";
+import { Profile, TProfile } from "../../profile/model";
+import { DB_URL } from "../../../utils/config";
 
 describe("Testing Favorite Service", () => {
   let profileService: ProfileService;

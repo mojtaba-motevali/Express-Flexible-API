@@ -1,4 +1,4 @@
-import { IErrorInterceptorRType, IInterceptorArgs } from "interfaces";
+import { IErrorInterceptorRType, IInterceptorArgs } from "../../interfaces";
 
 export const transformErrorResponse = <T>({
   statusCode,

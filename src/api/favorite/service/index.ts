@@ -1,6 +1,6 @@
-import { IFindQueryRTypeDto } from "interfaces";
 import { inject, injectable } from "inversify";
-import { IFindDTOArgs } from "types";
+import { IFindQueryRTypeDto } from "../../../interfaces";
+import { IFindDTOArgs } from "../../../types";
 import { ICreateFavorites } from "../dto";
 import { FavoriteSchemaKeys, TFavorite } from "../model";
 import { FavoriteRepository } from "../repository";

@@ -3,12 +3,15 @@ import "reflect-metadata";
 import assert from "assert";
 import { expect } from "expect";
 import { Container } from "inversify";
-import { DB_URL } from "utils/config";
-import { connectToDatabase, disconnectFromDatabse } from "utils/database";
 import { ProfileService } from ".";
 import { ICreateProfileDto } from "../dto";
 import { Profile, TProfile } from "../model";
 import { ProfileRepository } from "../repository";
+import {
+  connectToDatabase,
+  disconnectFromDatabse,
+} from "../../../utils/database";
+import { DB_URL } from "../../../utils/config";
 
 describe("Testing Profile Service", () => {
   let profileService: ProfileService;

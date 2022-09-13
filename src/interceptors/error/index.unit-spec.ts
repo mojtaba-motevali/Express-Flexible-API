@@ -1,5 +1,5 @@
-import { IInterceptorArgs } from "interfaces";
 import { transformErrorResponse } from ".";
+import { IInterceptorArgs } from "../../interfaces";
 describe("Testing error Interceptor", () => {
   let response: IInterceptorArgs<{ reason: string }>;
   beforeEach(() => {

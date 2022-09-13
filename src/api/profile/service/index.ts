@@ -1,6 +1,6 @@
-import { IFindQueryRTypeDto } from "interfaces";
 import { inject, injectable } from "inversify";
-import { IFindDTOArgs } from "types";
+import { IFindQueryRTypeDto } from "../../../interfaces";
+import { IFindDTOArgs } from "../../../types";
 import { ICreateProfileDto } from "../dto";
 import { TProfile } from "../model";
 import { ProfileRepository } from "../repository";

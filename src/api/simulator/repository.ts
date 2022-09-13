@@ -1,7 +1,7 @@
-import { IFindQueryRTypeDto, IRepository } from "interfaces";
 import { injectable } from "inversify";
 import { ClientSession, PipelineStage } from "mongoose";
-import { IFindDTOArgs, IFindSelectFieldsArgs } from "types";
+import { IFindQueryRTypeDto, IRepository } from "../../interfaces";
+import { IFindDTOArgs, IFindSelectFieldsArgs } from "../../types";
 import { ICreateSimulator } from "./dto";
 import { Simulator, TSimulator } from "./model";
 

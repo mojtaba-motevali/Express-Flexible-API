@@ -1,5 +1,5 @@
-import { IInterceptorArgs } from "interfaces";
 import { transformResponse } from ".";
+import { IInterceptorArgs } from "../../interfaces";
 describe("Testing response Interceptor", () => {
   let response: IInterceptorArgs<{ _id: string; first_name: string }>;
   const objectBody = {

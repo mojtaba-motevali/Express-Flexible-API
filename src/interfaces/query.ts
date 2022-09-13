@@ -1,5 +1,3 @@
-import { ApiModel } from "swagger-express-ts";
-
 export class IQueryDto<T> {
   page: number;
   limit: number;

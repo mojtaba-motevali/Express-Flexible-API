@@ -1,10 +1,14 @@
 import { IEnvSchema } from "interfaces";
 import Joi from "joi";
-import { numberSchema, stringSchema } from "utils/validator";
+import { numberSchema, stringSchema } from "../validator";
 
 export const EnvValidator = Joi.object<IEnvSchema>({
   SERVICE_PORT: numberSchema,
-  DB_URL: stringSchema.required().pattern(/^mongodb:\/\/.+:[0-9]+/),
+  DB_USER: stringSchema,
+  DB_PASS: stringSchema,
+  DB_HOST: stringSchema.required(),
+  DB_PORT: numberSchema.required(),
+  DB_SCHEMA: stringSchema.required(),
   ALLOWED_ORIGINS: Joi.array()
     .required()
     .items(stringSchema.regex(/https?:\/\//)),

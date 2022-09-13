@@ -1,8 +1,8 @@
 import { Response } from "express";
 import { checkSchema } from "express-validator";
-import { InterceptorJsonBody } from "interceptors";
 import Joi, { Schema } from "joi";
-import { enumSchema } from "utils/validator";
+import { InterceptorJsonBody } from "../../interceptors";
+import { enumSchema } from "../validator";
 
 export const overrideExpressJson = (response: Response) => {
   const json = response.json;

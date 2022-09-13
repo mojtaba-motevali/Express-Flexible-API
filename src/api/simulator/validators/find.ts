@@ -1,7 +1,14 @@
 import { checkSchema } from "express-validator";
 import { Types } from "mongoose";
-import { customQuerySanitizer, customQueryValidator } from "utils/common";
-import { dateSchema, numberSchema, objectIdSchema } from "utils/validator";
+import {
+  customQuerySanitizer,
+  customQueryValidator,
+} from "../../../utils/common";
+import {
+  dateSchema,
+  numberSchema,
+  objectIdSchema,
+} from "../../../utils/validator";
 
 export const validateFindSimulators = checkSchema(
   {

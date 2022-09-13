@@ -1,13 +1,16 @@
 import { checkSchema } from "express-validator";
 import { Types } from "mongoose";
-import { customQuerySanitizer, customQueryValidator } from "utils/common";
+import {
+  customQuerySanitizer,
+  customQueryValidator,
+} from "../../../utils/common";
 import {
   dateSchema,
   emailSchema,
   numberSchema,
   objectIdSchema,
   stringSchema,
-} from "utils/validator";
+} from "../../../utils/validator";
 
 export interface TProfile {
   _id?: Types.ObjectId;

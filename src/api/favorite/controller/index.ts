@@ -1,9 +1,6 @@
 import { Request, Response } from "express";
 import { inject } from "inversify";
 import { controller, httpGet, httpPost } from "inversify-express-utils";
-import { IFindDTOArgs } from "types";
-import { queryValidatorSchema } from "utils/common";
-import { validate } from "middlewares";
 import { ICreateFavorites } from "../dto";
 import { FavoriteSchemaKeys, TFavorite } from "../model";
 import { FavoriteService } from "../service";
@@ -19,7 +16,10 @@ import {
   CreateFavoriteRType,
   FindFavoriteRType,
 } from "../doc";
-import { ValidationError } from "api/docs";
+import { ValidationError } from "../../docs";
+import { queryValidatorSchema } from "../../../utils/common";
+import { validate } from "../../../middlewares";
+import { IFindDTOArgs } from "../../../types";
 
 @ApiPath({
   path: "/favorites",

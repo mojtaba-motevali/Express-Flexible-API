@@ -1,9 +1,7 @@
 import { Request, Response } from "express";
 import { inject } from "inversify";
 import { controller, httpGet, httpPost } from "inversify-express-utils";
-import { IFindDTOArgs } from "types";
 import { queryValidatorSchema } from "utils/common";
-import { validate } from "middlewares";
 import { Profile, ProfileSchemaKeys, TProfile } from "../model";
 import { ProfileService } from "../service";
 import { validateFindProfile, validateProfileCreation } from "../validators";
@@ -13,9 +11,14 @@ import {
   ApiPath,
   SwaggerDefinitionConstant,
 } from "swagger-express-ts";
-import { FindProfileRType } from "../doc";
-import { ValidationError } from "api/docs";
-import { CreateProfileArgsType, CreateProfileRType } from "api/profile/doc";
+import {
+  CreateProfileArgsType,
+  CreateProfileRType,
+  FindProfileRType,
+} from "../doc";
+import { ValidationError } from "../../docs";
+import { validate } from "../../../middlewares";
+import { IFindDTOArgs } from "../../../types";
 
 @ApiPath({
   path: "/profiles",

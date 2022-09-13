@@ -1,18 +1,21 @@
 import "reflect-metadata";
 
-import { Profile, TProfile } from "api/profile/model";
-import { ProfileService } from "api/profile/service";
 import assert from "assert";
 import { expect } from "expect";
 import { Container } from "inversify";
 import { Types } from "mongoose";
-import { DB_URL } from "utils/config";
-import { connectToDatabase, disconnectFromDatabse } from "utils/database";
 import { SimulatorService } from ".";
 import { ICreateSimulator } from "../dto";
 import { Simulator, TSimulator } from "../model";
-import { ProfileRepository } from "api/profile/repository";
 import { SimulatorRepository } from "../repository";
+import { ProfileService } from "../../profile/service";
+import { Profile, TProfile } from "../../profile/model";
+import {
+  connectToDatabase,
+  disconnectFromDatabse,
+} from "../../../utils/database";
+import { DB_URL } from "../../../utils/config";
+import { ProfileRepository } from "../../profile/repository";
 
 describe("Testing Simulator Service", () => {
   let profileService: ProfileService;

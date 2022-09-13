@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  db:
+    image: mongo
+    ports:
+      - '$DB_PORT:$DB_PORT'
+    environment: 
+      - MONGO_INITDB_ROOT_USERNAME=$DB_USER
+      - MONGO_INITDB_ROOT_PASSWORD=$DB_PASS
+    volumes: 
+      - ./data:/var/local/data
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    restart: "always" 
+    depends_on: 
+      - "db" 
+    ports: 
+      - '$API_SERVICE_PORT:$API_SERVICE_PORT'
+    environment: 
+      - API_SERVICE_PORT
+      - NODE_ENV
+      - DB_PASS
+      - DB_USER
+      - DB_HOST
+      - DB_PORT   
+
+  web-int:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: int-test
+    depends_on: 
+      - "db" 
+    ports: 
+      - '$API_SERVICE_PORT:$API_SERVICE_PORT'
+    environment: 
+      - API_SERVICE_PORT
+      - NODE_ENV
+      - DB_PASS
+      - DB_USER
+      - DB_HOST
+      - DB_PORT      
+  web-unit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: int-test
+    ports: 
+      - '$API_SERVICE_PORT:$API_SERVICE_PORT'
+    environment: 
+      - API_SERVICE_PORT
+      - NODE_ENV
+      - DB_PASS
+      - DB_USER
+      - DB_HOST
+      - DB_PORT   
+
+    

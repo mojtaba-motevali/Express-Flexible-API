@@ -1,4 +1,4 @@
-import { IInterceptorArgs, IResponseInterceptorRType } from "interfaces";
+import { IInterceptorArgs, IResponseInterceptorRType } from "../../interfaces";
 
 export const transformResponse = <T>({
   body,

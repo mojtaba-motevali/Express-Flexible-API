@@ -1,8 +1,7 @@
-import { IFindQueryRTypeDto } from "interfaces";
-import { IRepository } from "interfaces/repository";
 import { injectable } from "inversify";
 import { ClientSession, PipelineStage } from "mongoose";
-import { IFindDTOArgs, IFindSelectFieldsArgs } from "types";
+import { IFindQueryRTypeDto, IRepository } from "../../interfaces";
+import { IFindDTOArgs, IFindSelectFieldsArgs } from "../../types";
 import { Favorite, TFavorite } from "./model";
 
 @injectable()

@@ -3,12 +3,12 @@ import "reflect-metadata";
 import express from "express";
 import bodyParser from "body-parser";
 import { ALLOWED_ORIGINS, DB_URL, NODE_ENV, SERVICE_PORT } from "utils/config";
-import { connectToDatabase } from "utils/database";
 import cors from "cors";
-import { overrideExpressJson } from "utils/common";
 import { InversifyExpressServer } from "inversify-express-utils";
-import { bootstrap } from "inversify.config";
 import * as swagger from "swagger-express-ts";
+import { overrideExpressJson } from "./utils/common";
+import { bootstrap } from "./inversify.config";
+import { connectToDatabase } from "./utils/database";
 const _app = express();
 overrideExpressJson(_app.response);
 const inversifyApp = new InversifyExpressServer(

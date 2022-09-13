@@ -1,4 +1,4 @@
-import { IInterceptorArgs } from "interfaces";
+import { IInterceptorArgs } from "../interfaces";
 import { transformErrorResponse } from "./error";
 import { transformResponse } from "./response";
 

@@ -1,6 +1,6 @@
-import { IFindQueryRTypeDto } from "interfaces";
 import { inject, injectable } from "inversify";
-import { IFindDTOArgs } from "types";
+import { IFindQueryRTypeDto } from "../../../interfaces";
+import { IFindDTOArgs } from "../../../types";
 import { ICreateSimulator } from "../dto";
 import { TSimulator } from "../model";
 import { SimulatorRepository } from "../repository";

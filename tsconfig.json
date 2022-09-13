@@ -22,7 +22,7 @@
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
-  },
+  }
 }
   
   

@@ -1,4 +1,4 @@
-import { IQueryDto } from "interfaces";
+import { IQueryDto } from "../interfaces";
 
 export type IFindDTOArgs<T> = Partial<{
   [key in keyof T]:
