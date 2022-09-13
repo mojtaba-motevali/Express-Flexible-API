@@ -15,11 +15,11 @@ import {
   SwaggerDefinitionConstant,
 } from "swagger-express-ts";
 import {
-  CreateArgsType,
-  CreateFavoriteError,
+  CreateFavoriteArgsType,
   CreateFavoriteRType,
   FindFavoriteRType,
 } from "../doc";
+import { ValidationError } from "api/docs";
 
 @ApiPath({
   path: "/favorites",
@@ -34,8 +34,8 @@ export class FavoriteController {
     summary: "Get versions list",
     parameters: {
       body: {
-        type: typeof CreateArgsType,
-        model: "CreateArgsType",
+        type: typeof CreateFavoriteArgsType,
+        model: "CreateFavoriteArgsType",
         required: true,
       },
     },
@@ -47,8 +47,8 @@ export class FavoriteController {
       },
       400: {
         description: "Validation Error",
-        model: "CreateFavoriteError",
-        type: typeof CreateFavoriteError,
+        model: "ValidationError",
+        type: typeof ValidationError,
       },
     },
   })
@@ -76,8 +76,8 @@ export class FavoriteController {
     ])
   )
   @ApiOperationGet({
-    description: "Get versions objects list",
-    summary: "Get versions list",
+    description: "Get favorite  list",
+    summary: "Get favorite list by adding various filters.",
     parameters: {
       query: {
         ...FavoriteSchemaKeys.filter(
@@ -130,6 +130,11 @@ export class FavoriteController {
         description: "Success",
         model: "FindFavoriteRType",
         type: typeof FindFavoriteRType,
+      },
+      400: {
+        description: "Validation Error",
+        model: "ValidationError",
+        type: typeof ValidationError,
       },
     },
   })

@@ -60,3 +60,9 @@ export interface TProfile {
   divisa?: string;
   prefered_cryptocurrency?: string;
 }
+
+export const ProfileSchemaKeys = [
+  ...Object.keys(Profile.schema.obj),
+  "_id",
+  "created_at",
+];

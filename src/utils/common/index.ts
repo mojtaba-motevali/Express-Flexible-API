@@ -7,7 +7,6 @@ import { enumSchema } from "utils/validator";
 export const overrideExpressJson = (response: Response) => {
   const json = response.json;
   response.json = function (body) {
-    console.log("body", body);
     if (body.swagger) {
       return json.call(this, body);
     }
@@ -85,7 +84,7 @@ export const customQuerySanitizer = <T>(
       };
     } else if (value.charAt(0) == "%") {
       return {
-        $regex: cast(value),
+        $regex: RegExp(value.substring(1), "i"),
       };
     } else {
       return cast(value);
@@ -110,7 +109,7 @@ export const customQueryValidator = <T extends { $in: T } & { $regex: T }>(
       });
     } else if (value.$regex) {
       schemaToBeValidated = Joi.object({
-        $regex: Joi.string(),
+        $regex: Joi.custom((val) => val instanceof RegExp),
       });
     } else {
       schemaToBeValidated = Joi.object({

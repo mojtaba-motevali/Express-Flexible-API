@@ -4,48 +4,65 @@ import {
   ApiModelProperty,
   SwaggerDefinitionConstant,
 } from "swagger-express-ts";
-import { Favorite, TFavorite } from "./model";
+import { Simulator, TSimulator } from "./model";
 
 // ************* Schema **************
 
 @ApiModel({
-  description: "Favorite schema",
-  name: "Favorite",
+  description: "Simulator schema",
+  name: "Simulator",
 })
-export class FavoriteSchema {
+export class SimulatorSchema {
   @ApiModelProperty({
-    description: "Favorite id",
+    description: "Simulator id",
     required: false,
     type: SwaggerDefinitionConstant.STRING,
   })
   _id: Types.ObjectId;
   @ApiModelProperty({
-    description: "Favorite's profile id",
+    description: "Simulator's profile id",
     required: true,
     type: SwaggerDefinitionConstant.STRING,
   })
   profile_id: Types.ObjectId;
   @ApiModelProperty({
-    description: "Favorite name",
+    description: "Simulator price",
+    required: true,
+    type: SwaggerDefinitionConstant.NUMBER,
+  })
+  price: number;
+  @ApiModelProperty({
+    description: "Simulator quantity",
+    required: true,
+    type: SwaggerDefinitionConstant.NUMBER,
+  })
+  quantity: number;
+  @ApiModelProperty({
+    description: "Simulator euros",
+    required: true,
+    type: SwaggerDefinitionConstant.NUMBER,
+  })
+  euros: number;
+  @ApiModelProperty({
+    description: "Simulator cryptocurrency",
     required: true,
     type: SwaggerDefinitionConstant.STRING,
   })
-  name: string;
+  cryptocurrency: string;
   @ApiModelProperty({
-    description: "Favorites list",
-    required: false,
-    type: SwaggerDefinitionConstant.ARRAY,
-    itemType: SwaggerDefinitionConstant.STRING,
+    description: "Simulators date that this entity was recorded.",
+    required: true,
+    type: SwaggerDefinitionConstant.STRING,
   })
-  favorites: string[];
+  date_recorded: Date;
   @ApiModelProperty({
-    description: "Favorites date that this entity was created.",
+    description: "Simulators date that this entity was created.",
     required: false,
     type: SwaggerDefinitionConstant.STRING,
   })
   created_at: Date;
   @ApiModelProperty({
-    description: "Favorites date that this entity was last time updated.",
+    description: "Simulators date that this entity was last time updated.",
     required: false,
     type: SwaggerDefinitionConstant.STRING,
   })
@@ -54,24 +71,24 @@ export class FavoriteSchema {
 // ************* Create Types **************
 
 @ApiModel({
-  name: "CreateFavoriteArgsType",
-  description: "This Model is used to create favorites.",
+  name: "CreateSimulatorArgsType",
+  description: "This Model is used to create simulators.",
 })
-export class CreateFavoriteArgsType {
+export class CreateSimulatorArgsType {
   @ApiModelProperty({
-    model: "Favorite",
+    model: "Simulator",
     type: SwaggerDefinitionConstant.ARRAY,
-    itemType: "Favorite",
+    itemType: "Simulator",
     required: true,
   })
-  favorites: FavoriteSchema[];
+  simulators: SimulatorSchema[];
 }
 
 @ApiModel({
-  name: "CreateFavoriteRType",
-  description: "Return type of find favorite",
+  name: "CreateSimulatorRType",
+  description: "Return type of find simulator",
 })
-export class CreateFavoriteRType {
+export class CreateSimulatorRType {
   @ApiModelProperty({
     type: SwaggerDefinitionConstant.BOOLEAN,
     required: true,
@@ -83,8 +100,8 @@ export class CreateFavoriteRType {
   })
   code: number;
   @ApiModelProperty({
-    model: "Favorite",
-    itemType: typeof Favorite,
+    model: "Simulator",
+    itemType: typeof Simulator,
     type: SwaggerDefinitionConstant.ARRAY,
     required: true,
   })
@@ -93,16 +110,16 @@ export class CreateFavoriteRType {
 
 // ************* Find Type **************
 @ApiModel({
-  name: "FavoriteRType",
-  description: "Return type of find favorite",
+  name: "SimulatorRType",
+  description: "Return type of find simulator",
 })
 class RType {
   @ApiModelProperty({
-    model: "Favorite",
+    model: "Simulator",
     type: SwaggerDefinitionConstant.ARRAY,
     required: true,
   })
-  rows: TFavorite[];
+  rows: TSimulator[];
   @ApiModelProperty({
     type: SwaggerDefinitionConstant.NUMBER,
     required: true,
@@ -111,10 +128,10 @@ class RType {
 }
 
 @ApiModel({
-  name: "FindFavoriteRType",
-  description: "Return type of find favorite",
+  name: "FindSimulatorRType",
+  description: "Return type of find simulator",
 })
-export class FindFavoriteRType {
+export class FindSimulatorRType {
   @ApiModelProperty({
     type: SwaggerDefinitionConstant.BOOLEAN,
     required: true,
@@ -126,7 +143,7 @@ export class FindFavoriteRType {
   })
   code: number;
   @ApiModelProperty({
-    model: "FavoriteRType",
+    model: "SimulatorRType",
     itemType: typeof RType,
     type: SwaggerDefinitionConstant.ARRAY,
     required: true,

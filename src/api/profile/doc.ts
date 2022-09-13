@@ -4,48 +4,77 @@ import {
   ApiModelProperty,
   SwaggerDefinitionConstant,
 } from "swagger-express-ts";
-import { Favorite, TFavorite } from "./model";
+import { Profile, TProfile } from "./model";
 
 // ************* Schema **************
 
 @ApiModel({
-  description: "Favorite schema",
-  name: "Favorite",
+  description: "Profile schema",
+  name: "Profile",
 })
-export class FavoriteSchema {
+export class ProfileSchema {
   @ApiModelProperty({
-    description: "Favorite id",
+    description: "Profile id",
     required: false,
     type: SwaggerDefinitionConstant.STRING,
   })
   _id: Types.ObjectId;
   @ApiModelProperty({
-    description: "Favorite's profile id",
-    required: true,
-    type: SwaggerDefinitionConstant.STRING,
-  })
-  profile_id: Types.ObjectId;
-  @ApiModelProperty({
-    description: "Favorite name",
-    required: true,
-    type: SwaggerDefinitionConstant.STRING,
-  })
-  name: string;
-  @ApiModelProperty({
-    description: "Favorites list",
+    description: "Profile's full name",
     required: false,
-    type: SwaggerDefinitionConstant.ARRAY,
-    itemType: SwaggerDefinitionConstant.STRING,
+    type: SwaggerDefinitionConstant.STRING,
   })
-  favorites: string[];
+  full_name: string;
   @ApiModelProperty({
-    description: "Favorites date that this entity was created.",
+    description: "Profile's first name",
+    required: true,
+    type: SwaggerDefinitionConstant.STRING,
+  })
+  first_name: string;
+  @ApiModelProperty({
+    description: "Profile's last name",
+    required: true,
+    type: SwaggerDefinitionConstant.STRING,
+  })
+  last_name: string;
+  @ApiModelProperty({
+    description: "Profile's nickname",
+    required: false,
+    type: SwaggerDefinitionConstant.STRING,
+  })
+  nickname: string;
+  @ApiModelProperty({
+    description: "Profile's email",
+    required: true,
+    type: SwaggerDefinitionConstant.STRING,
+  })
+  email: string;
+  @ApiModelProperty({
+    description: "Profile's capital",
+    required: true,
+    type: SwaggerDefinitionConstant.NUMBER,
+  })
+  capital: number;
+  @ApiModelProperty({
+    description: "Profile's divisa",
+    required: true,
+    type: SwaggerDefinitionConstant.STRING,
+  })
+  divisa: string;
+  @ApiModelProperty({
+    description: "Profile's prefered cryptocurrency",
+    required: false,
+    type: SwaggerDefinitionConstant.STRING,
+  })
+  prefered_cryptocurrency: string;
+  @ApiModelProperty({
+    description: "Profile's date that this entity was created.",
     required: false,
     type: SwaggerDefinitionConstant.STRING,
   })
   created_at: Date;
   @ApiModelProperty({
-    description: "Favorites date that this entity was last time updated.",
+    description: "Profile's date that this entity was last time updated.",
     required: false,
     type: SwaggerDefinitionConstant.STRING,
   })
@@ -54,24 +83,24 @@ export class FavoriteSchema {
 // ************* Create Types **************
 
 @ApiModel({
-  name: "CreateFavoriteArgsType",
-  description: "This Model is used to create favorites.",
+  name: "CreateProfileArgsType",
+  description: "This Model is used to create profiles.",
 })
-export class CreateFavoriteArgsType {
+export class CreateProfileArgsType {
   @ApiModelProperty({
-    model: "Favorite",
+    model: "Profile",
     type: SwaggerDefinitionConstant.ARRAY,
-    itemType: "Favorite",
+    itemType: "Profile",
     required: true,
   })
-  favorites: FavoriteSchema[];
+  profiles: ProfileSchema[];
 }
 
 @ApiModel({
-  name: "CreateFavoriteRType",
-  description: "Return type of find favorite",
+  name: "CreateProfileRType",
+  description: "Return type of find profile",
 })
-export class CreateFavoriteRType {
+export class CreateProfileRType {
   @ApiModelProperty({
     type: SwaggerDefinitionConstant.BOOLEAN,
     required: true,
@@ -83,8 +112,8 @@ export class CreateFavoriteRType {
   })
   code: number;
   @ApiModelProperty({
-    model: "Favorite",
-    itemType: typeof Favorite,
+    model: "Profile",
+    itemType: typeof Profile,
     type: SwaggerDefinitionConstant.ARRAY,
     required: true,
   })
@@ -93,16 +122,16 @@ export class CreateFavoriteRType {
 
 // ************* Find Type **************
 @ApiModel({
-  name: "FavoriteRType",
-  description: "Return type of find favorite",
+  name: "RType",
+  description: "Return type of find profile",
 })
 class RType {
   @ApiModelProperty({
-    model: "Favorite",
+    model: "Profile",
     type: SwaggerDefinitionConstant.ARRAY,
     required: true,
   })
-  rows: TFavorite[];
+  rows: TProfile[];
   @ApiModelProperty({
     type: SwaggerDefinitionConstant.NUMBER,
     required: true,
@@ -111,10 +140,10 @@ class RType {
 }
 
 @ApiModel({
-  name: "FindFavoriteRType",
-  description: "Return type of find favorite",
+  name: "FindProfileRType",
+  description: "Return type of find profile",
 })
-export class FindFavoriteRType {
+export class FindProfileRType {
   @ApiModelProperty({
     type: SwaggerDefinitionConstant.BOOLEAN,
     required: true,
@@ -126,7 +155,7 @@ export class FindFavoriteRType {
   })
   code: number;
   @ApiModelProperty({
-    model: "FavoriteRType",
+    model: "RType",
     itemType: typeof RType,
     type: SwaggerDefinitionConstant.ARRAY,
     required: true,

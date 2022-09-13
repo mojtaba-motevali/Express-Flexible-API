@@ -2,7 +2,7 @@ import { IFindQueryRTypeDto } from "interfaces";
 import { inject, injectable } from "inversify";
 import { IFindDTOArgs } from "types";
 import { ICreateFavorites } from "../dto";
-import { TFavorite } from "../model";
+import { FavoriteSchemaKeys, TFavorite } from "../model";
 import { FavoriteRepository } from "../repository";
 
 @injectable()
@@ -16,17 +16,14 @@ export class FavoriteService {
     params: IFindDTOArgs<TFavorite> & { withProfile: boolean }
   ): Promise<IFindQueryRTypeDto<Partial<TFavorite>>> {
     try {
-      const { withProfile, name, ...rest } = params;
-      if (name && name.$regex !== undefined) {
-        name.$regex = new RegExp(name.$regex);
-      }
+      const { withProfile, ...rest } = params;
       return this.repository.find(
         { ...rest },
         {
-          _id: 1,
-          profile_id: 1,
-          name: 1,
-          favorites: 1,
+          ...FavoriteSchemaKeys.reduce((prev, curr) => {
+            prev[curr] = 1;
+            return prev;
+          }, {}),
           withProfile,
         },
         true

@@ -54,3 +54,8 @@ export type TSimulator = {
   euros: number;
   quantity: number;
 };
+export const SimulatorSchemaKeys = [
+  ...Object.keys(Simulator.schema.obj),
+  "_id",
+  "created_at",
+];
