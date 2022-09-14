@@ -1,62 +1,51 @@
-version: '3'
+version: '3.4'
 
 services:
   db:
-    image: mongo
+    image: mongo:5.0.12
     ports:
       - '$DB_PORT:$DB_PORT'
-    environment: 
-      - MONGO_INITDB_ROOT_USERNAME=$DB_USER
-      - MONGO_INITDB_ROOT_PASSWORD=$DB_PASS
+    # environment: 
+      # - MONGO_INITDB_ROOT_USERNAME=$DB_USER
+      # - MONGO_INITDB_ROOT_PASSWORD=$DB_PASS
     volumes: 
       - ./data:/var/local/data
   web:
     build:
       context: .
-      dockerfile: Dockerfile
-      target: prod
-    restart: "always" 
+      dockerfile: prod.Dockerfile
+    restart: always
+    healthcheck:
+      test: curl --fail http://localhost:$SERVICE_PORT/health-check || exit
+      interval: 10s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
     depends_on: 
-      - "db" 
+      - db 
     ports: 
-      - '$API_SERVICE_PORT:$API_SERVICE_PORT'
+      - '$SERVICE_PORT:$SERVICE_PORT'
     environment: 
-      - API_SERVICE_PORT
+      - SERVICE_PORT
       - NODE_ENV
       - DB_PASS
       - DB_USER
-      - DB_HOST
+      - DB_HOST=db
       - DB_PORT   
 
-  web-int:
+  test:
     build:
       context: .
-      dockerfile: Dockerfile
-      target: int-test
+      dockerfile: test.Dockerfile
     depends_on: 
-      - "db" 
+      - db
     ports: 
-      - '$API_SERVICE_PORT:$API_SERVICE_PORT'
+      - '$SERVICE_PORT:$SERVICE_PORT'
     environment: 
-      - API_SERVICE_PORT
+      - SERVICE_PORT
       - NODE_ENV
       - DB_PASS
       - DB_USER
-      - DB_HOST
+      - DB_HOST=db
       - DB_PORT      
-  web-unit:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: int-test
-    ports: 
-      - '$API_SERVICE_PORT:$API_SERVICE_PORT'
-    environment: 
-      - API_SERVICE_PORT
-      - NODE_ENV
-      - DB_PASS
-      - DB_USER
-      - DB_HOST
-      - DB_PORT   
-
     

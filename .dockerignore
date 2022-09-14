@@ -1,3 +1,7 @@
 
 
 node_modules
+dist
+Dockerfile
+docker-compose.prod.yaml
+yarn-error.lock

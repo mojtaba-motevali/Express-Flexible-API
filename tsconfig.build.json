@@ -1,5 +1,9 @@
 {
     "extends": "./tsconfig.json",
-    "exclude": ["node_modules", "dist", "**/*spec.ts"]
-  }
+    "exclude": ["node_modules", "dist", "**/*spec.ts"],
+      "compilerOptions": {
+        "module": "commonjs",
+        "types": ["reflect-metadata","express","node"],
+      }
+}
   

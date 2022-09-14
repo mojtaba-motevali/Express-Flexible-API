@@ -1,6 +1,8 @@
 
 build/
 
+yarn-error.lock
+
 dist/ 
 
 node_modules/

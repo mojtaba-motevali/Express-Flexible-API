@@ -42,17 +42,16 @@ inversifyApp.setConfig((config) => {
   );
   config.use(bodyParser.json());
   config.use(bodyParser.urlencoded({ extended: false }));
-  config.use("/api-docs", express.static("swagger"));
-  config.use(
-    "/api-docs/swagger/assets",
-    express.static("node_modules/swagger-ui-dist")
-  );
-
   if (NODE_ENV === "dev") {
+    config.use("/api-docs", express.static("swagger"));
+    config.use(
+      "/api-docs/swagger/assets",
+      express.static("node_modules/swagger-ui-dist")
+    );
   }
 });
 const app = inversifyApp.build();
-
+app.get("/health-check", (req, res) => res.sendStatus(200));
 app.listen(SERVICE_PORT, async () => {
   console.log(`Server started to listen on ${SERVICE_PORT}`);
   await connectToDatabase(DB_URL);
