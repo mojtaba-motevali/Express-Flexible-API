@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ $STAGE == "test"]
+if [ $STAGE == "test" ]
 then
-    yarn run test:int 
+    yarn run test:unit 
 fi
 
 MONGO_SERVICE="$DB_HOST:$DB_PORT"
