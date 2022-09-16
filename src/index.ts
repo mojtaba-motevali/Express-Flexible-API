@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import { InversifyExpressServer } from "inversify-express-utils";
 import * as swagger from "swagger-express-ts";
-import { overrideExpressJson } from "./utils/common";
+import { exceptionHandler, overrideExpressJson } from "./utils/common";
 import { bootstrap } from "./inversify.config";
 import { connectToDatabase } from "./utils/database";
 import {
@@ -14,10 +14,12 @@ import {
   NODE_ENV,
   SERVICE_PORT,
 } from "./utils/config";
+import { Logger } from "./utils/logger";
+const container = bootstrap();
 const _app = express();
-overrideExpressJson(_app.response);
+overrideExpressJson(_app.response, container.get(Logger));
 const inversifyApp = new InversifyExpressServer(
-  bootstrap(),
+  container,
   null,
   { rootPath: "/api" },
   _app
@@ -52,8 +54,10 @@ inversifyApp.setConfig((config) => {
 });
 const app = inversifyApp.build();
 app.get("/health-check", (req, res) => res.sendStatus(200));
+app.use(exceptionHandler(container.get(Logger)));
 app.listen(SERVICE_PORT, async () => {
   console.log(`Server started to listen on ${SERVICE_PORT}`);
+
   await connectToDatabase(DB_URL);
 });
 

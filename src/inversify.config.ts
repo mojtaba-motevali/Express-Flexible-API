@@ -11,9 +11,12 @@ import { ProfileRepository } from "./api/profile/repository";
 import { ProfileService } from "./api/profile/service";
 import { SimulatorRepository } from "./api/simulator/repository";
 import { SimulatorService } from "./api/simulator/service";
+import { Logger } from "./utils/logger";
 
 export const bootstrap = () => {
-  const container = new Container();
+  const container = new Container({ skipBaseClassChecks: true });
+
+  container.bind(Logger).toSelf().inSingletonScope();
   container
     .bind<interfaces.Controller>(ProfileController)
     .to(ProfileController)

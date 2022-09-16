@@ -17,9 +17,10 @@ import {
   FindFavoriteRType,
 } from "../doc";
 import { ValidationError } from "../../docs";
-import { queryValidatorSchema } from "../../../utils/common";
 import { validate } from "../../../middlewares";
 import { IFindDTOArgs } from "../../../types";
+import { queryValidatorSchema } from "../../../utils/validator";
+import { Logger, LOG_CONTEXT } from "../../../utils/logger";
 
 @ApiPath({
   path: "/favorites",
@@ -28,6 +29,7 @@ import { IFindDTOArgs } from "../../../types";
 })
 @controller("/favorites")
 export class FavoriteController {
+  @inject(Logger) private loggerService: Logger;
   @inject(FavoriteService) private favoriteService: FavoriteService;
   @ApiOperationPost({
     description: "Create list of favorites",
@@ -62,6 +64,12 @@ export class FavoriteController {
         .status(201)
         .json(await this.favoriteService.createFavorites(body.favorites));
     } catch (err) {
+      this.loggerService.emit("error", {
+        error: err,
+        context: LOG_CONTEXT.CONTROLLER,
+        methodName: "createFavorites",
+        type: "error",
+      });
       res.status(400).json({
         errorDetails: [{ msg: err.message }],
       });
@@ -155,6 +163,12 @@ export class FavoriteController {
         })
       );
     } catch (err) {
+      this.loggerService.emit("error", {
+        error: err,
+        context: LOG_CONTEXT.CONTROLLER,
+        methodName: "findFavorites",
+        type: "error",
+      });
       res.status(400).json({
         errorDetails: [{ msg: err.message }],
       });

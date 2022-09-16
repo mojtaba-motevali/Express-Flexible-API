@@ -1,10 +1,8 @@
 import { checkSchema } from "express-validator";
 import { Types } from "mongoose";
+import { customQuerySanitizer } from "../../../utils/common";
 import {
-  customQuerySanitizer,
   customQueryValidator,
-} from "../../../utils/common";
-import {
   dateSchema,
   numberSchema,
   objectIdSchema,

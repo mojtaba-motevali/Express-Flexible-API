@@ -64,6 +64,7 @@
     "mongoose-delete": "^0.5.4",
     "reflect-metadata": "^0.1.13",
     "swagger-express-ts": "^1.1.0",
-    "typescript": "^4.8.3"
+    "typescript": "^4.8.3",
+    "winston": "^3.8.2"
   }
 }

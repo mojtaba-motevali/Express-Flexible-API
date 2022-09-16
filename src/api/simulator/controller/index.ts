@@ -20,8 +20,9 @@ import {
 } from "../docs";
 import { ValidationError } from "../../docs";
 import { validate } from "../../../middlewares";
-import { queryValidatorSchema } from "../../../utils/common";
 import { IFindDTOArgs } from "../../../types";
+import { queryValidatorSchema } from "../../../utils/validator";
+import { Logger, LOG_CONTEXT } from "../../../utils/logger";
 
 @ApiPath({
   path: "/simulators",
@@ -30,6 +31,7 @@ import { IFindDTOArgs } from "../../../types";
 })
 @controller("/simulators")
 export class SimulatorController {
+  @inject(Logger) private loggerService: Logger;
   @inject(SimulatorService) private simulatorService: SimulatorService;
 
   @ApiOperationPost({
@@ -62,7 +64,19 @@ export class SimulatorController {
         .status(201)
         .json(await this.simulatorService.createSimulator(body.simulators));
     } catch (err) {
-      res.status(400).json(err.message);
+      this.loggerService.emit("error", {
+        error: err,
+        context: LOG_CONTEXT.CONTROLLER,
+        methodName: "createSimulators",
+        type: "error",
+      });
+      res.status(400).json({
+        errorDetals: [
+          {
+            msg: err.message,
+          },
+        ],
+      });
     }
   }
 
@@ -162,7 +176,15 @@ export class SimulatorController {
         })
       );
     } catch (err) {
-      res.status(400).json(err.message);
+      this.loggerService.emit("error", {
+        error: err,
+        context: LOG_CONTEXT.CONTROLLER,
+        methodName: "createSimulators",
+        type: "error",
+      });
+      res.status(400).json({
+        errorDetails: [{ msg: err.message }],
+      });
     }
   }
 }

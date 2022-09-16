@@ -18,7 +18,8 @@ import {
 import { ValidationError } from "../../docs";
 import { validate } from "../../../middlewares";
 import { IFindDTOArgs } from "../../../types";
-import { queryValidatorSchema } from "../../../utils/common";
+import { Logger, LOG_CONTEXT } from "../../../utils/logger";
+import { queryValidatorSchema } from "../../../utils/validator";
 
 @ApiPath({
   path: "/profiles",
@@ -28,7 +29,7 @@ import { queryValidatorSchema } from "../../../utils/common";
 @controller("/profiles")
 export class ProfileController {
   @inject(ProfileService) private profileService: ProfileService;
-
+  @inject(Logger) private loggerService: Logger;
   @httpPost("/", validate(validateProfileCreation))
   @ApiOperationPost({
     description: "Create list of profiles",
@@ -59,7 +60,19 @@ export class ProfileController {
         .status(201)
         .json(await this.profileService.createProfile(body.profiles));
     } catch (err) {
-      res.status(400).json(err);
+      this.loggerService.emit("error", {
+        error: err,
+        context: LOG_CONTEXT.CONTROLLER,
+        methodName: "createProfile",
+        type: "error",
+      });
+      res.status(400).json({
+        errorDetails: [
+          {
+            msg: err.message,
+          },
+        ],
+      });
     }
   }
 
@@ -146,7 +159,19 @@ export class ProfileController {
         .status(200)
         .json(await this.profileService.findProfilesService({ ...query }));
     } catch (err) {
-      res.status(400).json(err);
+      this.loggerService.emit("error", {
+        error: err,
+        context: LOG_CONTEXT.CONTROLLER,
+        methodName: "findProfiles",
+        type: "error",
+      });
+      res.status(400).json({
+        errorDetails: [
+          {
+            msg: err.message,
+          },
+        ],
+      });
     }
   }
 }
